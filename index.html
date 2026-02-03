@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alex Jensen | MVP Development</title>
+  <meta name="description" content="Fixed-price MVP sprints for non-technical founders. Ship your product in 4-6 weeks.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0a0a0a;
+      color: #e5e5e5;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+    
+    header {
+      margin-bottom: 60px;
+    }
+    
+    .name {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #888;
+      margin-bottom: 16px;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 24px;
+      color: #fff;
+    }
+    
+    .tagline {
+      font-size: 1.25rem;
+      color: #888;
+      max-width: 600px;
+    }
+    
+    .cta-section {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      border: 1px solid #2a2a4a;
+      border-radius: 12px;
+      padding: 32px;
+      margin: 48px 0;
+    }
+    
+    .cta-section h2 {
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+      color: #fff;
+    }
+    
+    .price {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #4ade80;
+      margin-bottom: 8px;
+    }
+    
+    .timeline {
+      color: #888;
+      margin-bottom: 24px;
+    }
+    
+    .btn {
+      display: inline-block;
+      background: #4ade80;
+      color: #0a0a0a;
+      padding: 14px 32px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(74, 222, 128, 0.3);
+    }
+    
+    section {
+      margin-bottom: 48px;
+    }
+    
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+    
+    ul {
+      list-style: none;
+    }
+    
+    li {
+      padding: 12px 0;
+      border-bottom: 1px solid #222;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    
+    li:last-child {
+      border-bottom: none;
+    }
+    
+    .check {
+      color: #4ade80;
+      font-weight: bold;
+    }
+    
+    .process-step {
+      display: flex;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid #222;
+    }
+    
+    .process-step:last-child {
+      border-bottom: none;
+    }
+    
+    .step-num {
+      background: #222;
+      color: #4ade80;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+    
+    .step-content h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #fff;
+    }
+    
+    .step-content p {
+      color: #888;
+      font-size: 0.9rem;
+    }
+    
+    .ideal-for {
+      background: #111;
+      border-radius: 12px;
+      padding: 24px;
+    }
+    
+    .ideal-for p {
+      color: #888;
+      margin-bottom: 16px;
+    }
+    
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    
+    .tag {
+      background: #222;
+      color: #e5e5e5;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.875rem;
+    }
+    
+    footer {
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid #222;
+      color: #666;
+      font-size: 0.875rem;
+    }
+    
+    footer a {
+      color: #888;
+      text-decoration: none;
+    }
+    
+    footer a:hover {
+      color: #4ade80;
+    }
+    
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.75rem;
+      }
+      
+      .price {
+        font-size: 1.5rem;
+      }
+      
+      .container {
+        padding: 40px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <p class="name">Alex Jensen</p>
+      <h1>I build MVPs for founders who need to ship.</h1>
+      <p class="tagline">Fixed-price sprints. Working product in 4-6 weeks. No surprises.</p>
+    </header>
+    
+    <div class="cta-section">
+      <h2>MVP Sprint</h2>
+      <p class="price">$12k – $25k</p>
+      <p class="timeline">4-6 weeks · Fixed scope · Deposit to start</p>
+      <a href="https://cal.com" class="btn">Book a Scoping Call</a>
+    </div>
+    
+    <section>
+      <h2>What you get</h2>
+      <ul>
+        <li><span class="check">✓</span> Deployed, working v1 — not a prototype</li>
+        <li><span class="check">✓</span> Core user journey, end to end</li>
+        <li><span class="check">✓</span> Basic admin dashboard</li>
+        <li><span class="check">✓</span> Key integrations (payments, auth, email, etc.)</li>
+        <li><span class="check">✓</span> Handoff doc with next steps</li>
+      </ul>
+    </section>
+    
+    <section>
+      <h2>How it works</h2>
+      <div class="process-step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3>15-min scoping call</h3>
+          <p>We define what "done" looks like. I'll tell you if it fits a sprint.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3>Fixed quote + deposit</h3>
+          <p>You know the price upfront. Deposit locks in the timeline.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3>Build sprint</h3>
+          <p>I build. You get async updates. Weekly check-ins if you want them.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h3>Ship + handoff</h3>
+          <p>Deployed product, docs, and a clear path for what's next.</p>
+        </div>
+      </div>
+    </section>
+    
+    <section>
+      <h2>Good fit if you're...</h2>
+      <div class="ideal-for">
+        <p>A founder or operator with a real product problem, budget ready, and urgency to ship — not just exploring.</p>
+        <div class="tags">
+          <span class="tag">Non-technical founders</span>
+          <span class="tag">Pre-seed / Seed</span>
+          <span class="tag">B2B SaaS</span>
+          <span class="tag">Internal tools</span>
+          <span class="tag">Marketplaces</span>
+          <span class="tag">AI wrappers</span>
+        </div>
+      </div>
+    </section>
+    
+    <section>
+      <h2>Not a fit if...</h2>
+      <ul>
+        <li><span class="check" style="color: #f87171;">✗</span> You're idea-stage with no budget</li>
+        <li><span class="check" style="color: #f87171;">✗</span> You need ongoing maintenance or a full-time dev</li>
+        <li><span class="check" style="color: #f87171;">✗</span> You want hourly billing or open-ended scope</li>
+      </ul>
+    </section>
+    
+    <footer>
+      <p>Questions? <a href="mailto:alex@example.com">alex@example.com</a></p>
+    </footer>
+  </div>
+</body>
+</html>

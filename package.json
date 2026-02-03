@@ -1,0 +1,12 @@
+{
+  "name": "mvp-studio",
+  "version": "1.0.0",
+  "description": "MVP development services landing page",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["mvp", "development", "freelance"],
+  "author": "Alex Jensen",
+  "license": "ISC"
+}
