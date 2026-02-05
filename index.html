@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>MVP Studio</title>
   <meta name="description" content="Fixed-price MVP sprints. Ship in 4-6 weeks.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,7 +11,7 @@
   <style>
     :root {
       --bg: #000;
-      --surface: rgba(10, 10, 18, 0.92);
+      --surface: rgba(10, 10, 18, 0.95);
       --border: rgba(255, 255, 255, 0.1);
       --text: #fafafa;
       --text-muted: #71717a;
@@ -20,12 +20,15 @@
     
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
+    html, body {
+      overflow-x: hidden;
+    }
+    
     body {
       font-family: 'Inter', -apple-system, system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
       -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
     }
     
     #space {
@@ -46,7 +49,7 @@
       padding: 16px 20px;
       z-index: 100;
       backdrop-filter: blur(12px);
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.6);
       border-bottom: 1px solid var(--border);
     }
     
@@ -59,62 +62,88 @@
     }
     
     .logo { font-weight: 600; font-size: 15px; }
+    .nav-link { font-size: 14px; color: var(--text-muted); text-decoration: none; }
     
-    .nav-link {
-      font-size: 14px;
-      color: var(--text-muted);
-      text-decoration: none;
-    }
-    
-    /* Content sections - standard flow on mobile */
-    .content {
-      position: relative;
+    /* 3D Universe container */
+    .universe {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       z-index: 1;
+      perspective: 1200px;
+      perspective-origin: 50% 50%;
+      pointer-events: none;
+      overflow: hidden;
     }
     
-    section {
-      min-height: 100vh;
+    .track {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+    }
+    
+    /* Panels floating in 3D space */
+    .panel {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 100px 20px;
-      position: relative;
-    }
-    
-    .section-inner {
-      max-width: 600px;
-      width: 100%;
+      transform-style: preserve-3d;
       opacity: 0;
-      transform: translateY(50px) scale(0.95);
-      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+      padding: 20px;
     }
     
-    section.visible .section-inner {
+    .panel.active {
       opacity: 1;
-      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+    
+    .panel-inner {
+      width: 100%;
+      max-width: 520px;
+      transform: translateZ(0);
+    }
+    
+    /* Z positions for each panel */
+    .panel-0 { transform: translateZ(0px); }
+    .panel-1 { transform: translateZ(-1500px); }
+    .panel-2 { transform: translateZ(-3000px); }
+    .panel-3 { transform: translateZ(-4500px); }
+    .panel-4 { transform: translateZ(-6000px); }
+    
+    /* Scroll spacer */
+    .scroll-spacer {
+      height: 600vh;
+      position: relative;
+      z-index: -1;
     }
     
     /* Hero */
-    .hero { padding-top: 120px; }
+    .hero-content { text-align: center; }
     
-    .hero h1 {
-      font-size: clamp(40px, 12vw, 72px);
+    .hero-content h1 {
+      font-size: clamp(36px, 10vw, 64px);
       font-weight: 700;
       letter-spacing: -0.04em;
       line-height: 0.95;
       margin-bottom: 20px;
-      text-align: center;
     }
     
-    .hero p {
-      font-size: clamp(16px, 4vw, 20px);
+    .hero-content p {
+      font-size: clamp(15px, 4vw, 18px);
       color: var(--text-muted);
-      text-align: center;
-      margin-bottom: 36px;
+      margin-bottom: 32px;
       line-height: 1.5;
     }
-    
-    .cta-wrap { display: flex; justify-content: center; }
     
     .cta-btn {
       display: inline-flex;
@@ -124,24 +153,15 @@
       color: var(--bg);
       padding: 16px 32px;
       border-radius: 12px;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 500;
       text-decoration: none;
-      transition: all 0.3s ease;
-    }
-    
-    .cta-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
     }
     
     .cta-btn svg { width: 18px; height: 18px; }
     
     .scroll-hint {
-      position: absolute;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
+      margin-top: 60px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -163,7 +183,7 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 20px;
-      padding: clamp(28px, 6vw, 48px);
+      padding: clamp(24px, 5vw, 40px);
       backdrop-filter: blur(20px);
     }
     
@@ -173,13 +193,13 @@
       color: var(--accent);
       text-transform: uppercase;
       letter-spacing: 0.2em;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       text-align: center;
     }
     
     /* Pricing */
     .pricing-amount {
-      font-size: clamp(40px, 12vw, 56px);
+      font-size: clamp(36px, 10vw, 52px);
       font-weight: 700;
       letter-spacing: -0.04em;
       margin-bottom: 4px;
@@ -187,88 +207,81 @@
     }
     
     .pricing-amount span {
-      font-size: clamp(20px, 6vw, 28px);
+      font-size: clamp(18px, 5vw, 26px);
       color: var(--text-muted);
       font-weight: 500;
     }
     
     .pricing-details {
       color: var(--text-muted);
-      font-size: 14px;
-      margin-bottom: 32px;
+      font-size: 13px;
+      margin-bottom: 24px;
       text-align: center;
     }
     
     .features {
       list-style: none;
-      margin-bottom: 32px;
+      margin-bottom: 24px;
     }
     
     .features li {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 12px 0;
+      gap: 10px;
+      padding: 10px 0;
       border-bottom: 1px solid var(--border);
-      font-size: 14px;
+      font-size: 13px;
       color: rgba(255, 255, 255, 0.85);
     }
     
     .features li:last-child { border-bottom: none; }
     
-    .check { color: var(--accent); flex-shrink: 0; width: 18px; height: 18px; }
+    .check { color: var(--accent); flex-shrink: 0; width: 16px; height: 16px; }
     
     .card-cta {
       display: block;
       width: 100%;
       background: var(--text);
       color: var(--bg);
-      padding: 16px;
+      padding: 14px;
       border-radius: 10px;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 500;
       text-decoration: none;
       text-align: center;
     }
     
     /* Steps */
-    .steps { display: grid; gap: 16px; }
+    .steps { display: grid; gap: 12px; }
     
     .step {
       display: flex;
-      gap: 16px;
-      padding: 20px;
+      gap: 14px;
+      padding: 16px;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: 12px;
       backdrop-filter: blur(16px);
+      align-items: flex-start;
     }
     
     .step-num {
-      width: 44px;
-      height: 44px;
+      width: 36px;
+      height: 36px;
       background: rgba(34, 211, 238, 0.15);
       border: 1px solid rgba(34, 211, 238, 0.3);
-      border-radius: 12px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 600;
       color: var(--accent);
       flex-shrink: 0;
     }
     
-    .step h3 {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-    
-    .step p {
-      color: var(--text-muted);
-      font-size: 13px;
-    }
+    .step h3 { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+    .step p { color: var(--text-muted); font-size: 12px; }
     
     /* Fit */
     .fit-grid {
@@ -280,55 +293,67 @@
     .fit-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 24px;
+      border-radius: 12px;
+      padding: 20px;
       backdrop-filter: blur(16px);
     }
     
     .fit-card h3 {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.12em;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
     
     .fit-card.good h3 { color: var(--accent); }
     .fit-card.bad h3 { color: #f87171; }
     
     .fit-list { list-style: none; }
-    
     .fit-list li {
-      font-size: 12px;
+      font-size: 11px;
       color: rgba(255, 255, 255, 0.6);
-      padding: 8px 0;
+      padding: 6px 0;
       border-bottom: 1px solid var(--border);
     }
-    
     .fit-list li:last-child { border-bottom: none; }
     
-    /* Footer */
+    /* Final CTA */
     .final-cta { text-align: center; }
-    
     .final-cta h2 {
-      font-size: clamp(32px, 10vw, 56px);
+      font-size: clamp(28px, 8vw, 48px);
       font-weight: 700;
       letter-spacing: -0.03em;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
-    
     .final-cta a {
       color: var(--accent);
       text-decoration: none;
-      font-size: 18px;
+      font-size: 16px;
     }
     
-    /* Mobile adjustments */
-    @media (max-width: 600px) {
-      section { min-height: auto; padding: 80px 16px; }
-      .hero { min-height: 100vh; padding-top: 100px; }
-      .fit-grid { grid-template-columns: 1fr; }
-      .step { flex-direction: column; gap: 12px; }
+    /* Progress indicator */
+    .progress {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 50;
+    }
+    
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: all 0.3s;
+    }
+    
+    .progress-dot.active {
+      background: var(--accent);
+      box-shadow: 0 0 10px var(--accent);
     }
   </style>
 </head>
@@ -342,141 +367,131 @@
     </div>
   </nav>
   
-  <div class="content">
-    <!-- Hero -->
-    <section class="hero visible">
-      <div class="section-inner">
-        <h1>Ship your MVP<br>in weeks.</h1>
-        <p>Fixed-price sprints for founders who move fast.</p>
-        <div class="cta-wrap">
+  <div class="universe">
+    <div class="track" id="track">
+      
+      <!-- Panel 0: Hero -->
+      <div class="panel panel-0 active" data-index="0">
+        <div class="panel-inner hero-content">
+          <h1>Ship your MVP<br>in weeks.</h1>
+          <p>Fixed-price sprints for founders who move fast.</p>
           <a href="https://cal.com" class="cta-btn">
             Book a call
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
-        </div>
-      </div>
-      <div class="scroll-hint">
-        <span>Scroll</span>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 5v14M5 12l7 7 7-7"/>
-        </svg>
-      </div>
-    </section>
-    
-    <!-- Pricing -->
-    <section>
-      <div class="section-inner">
-        <div class="card">
-          <p class="section-label">Pricing</p>
-          <p class="pricing-amount">$12k <span>– $25k</span></p>
-          <p class="pricing-details">4–6 weeks · Fixed scope · 50% upfront</p>
-          <ul class="features">
-            <li><svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Production-ready v1</li>
-            <li><svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Full user journey</li>
-            <li><svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Admin dashboard</li>
-            <li><svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Key integrations</li>
-            <li><svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Docs + handoff</li>
-          </ul>
-          <a href="https://cal.com" class="card-cta">Book discovery call</a>
-        </div>
-      </div>
-    </section>
-    
-    <!-- Process -->
-    <section>
-      <div class="section-inner">
-        <p class="section-label">Process</p>
-        <div class="steps">
-          <div class="step">
-            <div class="step-num">1</div>
-            <div><h3>Discovery call</h3><p>15 min. Define scope, confirm fit.</p></div>
-          </div>
-          <div class="step">
-            <div class="step-num">2</div>
-            <div><h3>Fixed quote</h3><p>Clear price. Deposit locks timeline.</p></div>
-          </div>
-          <div class="step">
-            <div class="step-num">3</div>
-            <div><h3>Build sprint</h3><p>Async updates. Weekly demos optional.</p></div>
-          </div>
-          <div class="step">
-            <div class="step-num">4</div>
-            <div><h3>Ship + handoff</h3><p>Deployed. Documented. Done.</p></div>
+          <div class="scroll-hint">
+            <span>Scroll to explore</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
           </div>
         </div>
       </div>
-    </section>
-    
-    <!-- Fit -->
-    <section>
-      <div class="section-inner">
-        <p class="section-label">Fit</p>
-        <div class="fit-grid">
-          <div class="fit-card good">
-            <h3>Good fit</h3>
-            <ul class="fit-list">
-              <li>Non-technical founders</li>
-              <li>Pre-seed / Seed</li>
-              <li>B2B SaaS</li>
-              <li>Internal tools</li>
-              <li>Marketplaces</li>
+      
+      <!-- Panel 1: Pricing -->
+      <div class="panel panel-1" data-index="1">
+        <div class="panel-inner">
+          <div class="card">
+            <p class="section-label">Pricing</p>
+            <p class="pricing-amount">$12k <span>– $25k</span></p>
+            <p class="pricing-details">4–6 weeks · Fixed scope · 50% upfront</p>
+            <ul class="features">
+              <li><svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Production-ready v1</li>
+              <li><svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Full user journey</li>
+              <li><svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Admin dashboard</li>
+              <li><svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Key integrations</li>
+              <li><svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Docs + handoff</li>
             </ul>
-          </div>
-          <div class="fit-card bad">
-            <h3>Not a fit</h3>
-            <ul class="fit-list">
-              <li>Idea-stage, no budget</li>
-              <li>Ongoing maintenance</li>
-              <li>Hourly billing</li>
-              <li>Open-ended scope</li>
-            </ul>
+            <a href="https://cal.com" class="card-cta">Book discovery call</a>
           </div>
         </div>
       </div>
-    </section>
-    
-    <!-- Final CTA -->
-    <section>
-      <div class="section-inner final-cta">
-        <h2>Ready to ship?</h2>
-        <a href="mailto:aljensen92@gmail.com">aljensen92@gmail.com</a>
+      
+      <!-- Panel 2: Process -->
+      <div class="panel panel-2" data-index="2">
+        <div class="panel-inner">
+          <p class="section-label">Process</p>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div><div><h3>Discovery call</h3><p>15 min. Define scope, confirm fit.</p></div></div>
+            <div class="step"><div class="step-num">2</div><div><h3>Fixed quote</h3><p>Clear price. Deposit locks timeline.</p></div></div>
+            <div class="step"><div class="step-num">3</div><div><h3>Build sprint</h3><p>Async updates. Weekly demos optional.</p></div></div>
+            <div class="step"><div class="step-num">4</div><div><h3>Ship + handoff</h3><p>Deployed. Documented. Done.</p></div></div>
+          </div>
+        </div>
       </div>
-    </section>
+      
+      <!-- Panel 3: Fit -->
+      <div class="panel panel-3" data-index="3">
+        <div class="panel-inner">
+          <p class="section-label">Fit</p>
+          <div class="fit-grid">
+            <div class="fit-card good">
+              <h3>Good fit</h3>
+              <ul class="fit-list">
+                <li>Non-technical founders</li>
+                <li>Pre-seed / Seed</li>
+                <li>B2B SaaS</li>
+                <li>Internal tools</li>
+              </ul>
+            </div>
+            <div class="fit-card bad">
+              <h3>Not a fit</h3>
+              <ul class="fit-list">
+                <li>Idea-stage, no budget</li>
+                <li>Ongoing maintenance</li>
+                <li>Hourly billing</li>
+                <li>Open-ended scope</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Panel 4: Final CTA -->
+      <div class="panel panel-4" data-index="4">
+        <div class="panel-inner final-cta">
+          <h2>Ready to ship?</h2>
+          <a href="mailto:aljensen92@gmail.com">aljensen92@gmail.com</a>
+        </div>
+      </div>
+      
+    </div>
   </div>
+  
+  <!-- Progress dots -->
+  <div class="progress">
+    <div class="progress-dot active" data-index="0"></div>
+    <div class="progress-dot" data-index="1"></div>
+    <div class="progress-dot" data-index="2"></div>
+    <div class="progress-dot" data-index="3"></div>
+    <div class="progress-dot" data-index="4"></div>
+  </div>
+  
+  <div class="scroll-spacer"></div>
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
-    // === THREE.JS STARFIELD ===
+    // === STARFIELD ===
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x000000, 0.0004);
     
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 3000);
-    camera.position.z = 0;
-    
-    const renderer = new THREE.WebGLRenderer({
-      canvas: document.getElementById('space'),
-      antialias: true,
-      alpha: true
-    });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 4000);
+    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('space'), antialias: true });
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
     
     // Stars
-    const starCount = 5000;
-    const positions = new Float32Array(starCount * 3);
+    const starGeo = new THREE.BufferGeometry();
+    const starCount = 4000;
+    const pos = new Float32Array(starCount * 3);
     const sizes = new Float32Array(starCount);
     
     for (let i = 0; i < starCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 2000;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 2000;
-      positions[i * 3 + 2] = Math.random() * -3000;
+      pos[i * 3] = (Math.random() - 0.5) * 2000;
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 2000;
+      pos[i * 3 + 2] = Math.random() * -6000;
       sizes[i] = Math.random() * 2 + 0.5;
     }
     
-    const starGeo = new THREE.BufferGeometry();
-    starGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    starGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
     starGeo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
     
     const starMat = new THREE.ShaderMaterial({
@@ -487,7 +502,7 @@
         void main() {
           vSize = size;
           vec4 mv = modelViewMatrix * vec4(position, 1.0);
-          gl_PointSize = size * (250.0 / -mv.z);
+          gl_PointSize = size * (200.0 / -mv.z);
           gl_Position = projectionMatrix * mv;
         }
       `,
@@ -497,7 +512,7 @@
         void main() {
           float d = length(gl_PointCoord - 0.5);
           float a = 1.0 - smoothstep(0.0, 0.5, d);
-          a *= 0.7 + 0.3 * sin(time * 2.0 + vSize * 10.0);
+          a *= 0.6 + 0.4 * sin(time * 1.5 + vSize * 8.0);
           gl_FragColor = vec4(1.0, 1.0, 1.0, a);
         }
       `,
@@ -509,71 +524,94 @@
     scene.add(new THREE.Points(starGeo, starMat));
     
     // Nebula
-    const nebulaGeo = new THREE.BufferGeometry();
-    const nebulaPos = new Float32Array(40 * 3);
-    for (let i = 0; i < 40; i++) {
-      nebulaPos[i * 3] = (Math.random() - 0.5) * 1500;
-      nebulaPos[i * 3 + 1] = (Math.random() - 0.5) * 1500;
-      nebulaPos[i * 3 + 2] = Math.random() * -2500 - 300;
+    const nebGeo = new THREE.BufferGeometry();
+    const nebPos = new Float32Array(30 * 3);
+    for (let i = 0; i < 30; i++) {
+      nebPos[i * 3] = (Math.random() - 0.5) * 1500;
+      nebPos[i * 3 + 1] = (Math.random() - 0.5) * 1500;
+      nebPos[i * 3 + 2] = Math.random() * -5000 - 500;
     }
-    nebulaGeo.setAttribute('position', new THREE.BufferAttribute(nebulaPos, 3));
+    nebGeo.setAttribute('position', new THREE.BufferAttribute(nebPos, 3));
     
-    const canvas = document.createElement('canvas');
-    canvas.width = canvas.height = 128;
-    const ctx = canvas.getContext('2d');
-    const grad = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
-    grad.addColorStop(0, 'rgba(34, 211, 238, 0.35)');
-    grad.addColorStop(0.5, 'rgba(139, 92, 246, 0.15)');
-    grad.addColorStop(1, 'transparent');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, 128, 128);
+    const c = document.createElement('canvas');
+    c.width = c.height = 128;
+    const ctx = c.getContext('2d');
+    const g = ctx.createRadialGradient(64,64,0,64,64,64);
+    g.addColorStop(0, 'rgba(34,211,238,0.3)');
+    g.addColorStop(0.5, 'rgba(139,92,246,0.15)');
+    g.addColorStop(1, 'transparent');
+    ctx.fillStyle = g;
+    ctx.fillRect(0,0,128,128);
     
-    const nebulaMat = new THREE.PointsMaterial({
+    const nebMat = new THREE.PointsMaterial({
       size: 400,
-      map: new THREE.CanvasTexture(canvas),
+      map: new THREE.CanvasTexture(c),
       transparent: true,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
-      opacity: 0.15
+      opacity: 0.12
     });
-    scene.add(new THREE.Points(nebulaGeo, nebulaMat));
+    scene.add(new THREE.Points(nebGeo, nebMat));
     
-    // Scroll motion
+    // === SCROLL LOGIC ===
+    const track = document.getElementById('track');
+    const panels = document.querySelectorAll('.panel');
+    const dots = document.querySelectorAll('.progress-dot');
+    const panelCount = panels.length;
+    const zPerPanel = 1500;
+    
     let scrollY = 0;
     let targetZ = 0;
     let currentZ = 0;
     
+    function getScrollProgress() {
+      const maxScroll = document.body.scrollHeight - innerHeight;
+      return Math.min(scrollY / maxScroll, 1);
+    }
+    
     window.addEventListener('scroll', () => {
       scrollY = window.scrollY;
-      targetZ = scrollY * 0.5;
+      const progress = getScrollProgress();
+      targetZ = progress * (panelCount - 1) * zPerPanel;
     });
     
-    // Animation
+    function updatePanels() {
+      const currentPanel = Math.round(currentZ / zPerPanel);
+      
+      panels.forEach((panel, i) => {
+        const isActive = i === currentPanel;
+        panel.classList.toggle('active', isActive);
+      });
+      
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentPanel);
+      });
+      
+      track.style.transform = `translateZ(${currentZ}px)`;
+    }
+    
+    // === ANIMATION ===
     const clock = new THREE.Clock();
+    
     function animate() {
       requestAnimationFrame(animate);
+      
       starMat.uniforms.time.value = clock.getElapsedTime();
+      
       currentZ += (targetZ - currentZ) * 0.08;
-      camera.position.z = -currentZ;
+      camera.position.z = -currentZ * 0.3;
+      
+      updatePanels();
       renderer.render(scene, camera);
     }
+    
     animate();
     
-    // Resize
     window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.aspect = innerWidth / innerHeight;
       camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setSize(innerWidth, innerHeight);
     });
-    
-    // Section visibility
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) e.target.classList.add('visible');
-      });
-    }, { threshold: 0.2 });
-    
-    document.querySelectorAll('section').forEach(s => observer.observe(s));
   </script>
 </body>
 </html>
