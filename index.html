@@ -10,28 +10,28 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #000;
-      --surface: rgba(10, 10, 18, 0.95);
-      --border: rgba(255, 255, 255, 0.1);
-      --text: #fafafa;
-      --text-muted: #71717a;
-      --accent: #22d3ee;
+      --surface: rgba(255, 255, 255, 0.95);
+      --surface-dark: rgba(15, 23, 42, 0.95);
+      --border: rgba(0, 0, 0, 0.08);
+      --text: #0f172a;
+      --text-light: #fff;
+      --text-muted: #64748b;
+      --accent: #0ea5e9;
+      --sky-top: #0c4a6e;
+      --sky-bottom: #7dd3fc;
     }
     
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    html, body {
-      overflow-x: hidden;
-    }
+    html, body { overflow-x: hidden; }
     
     body {
       font-family: 'Inter', -apple-system, system-ui, sans-serif;
-      background: var(--bg);
+      background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 100%);
       color: var(--text);
       -webkit-font-smoothing: antialiased;
     }
     
-    #space {
+    #sky {
       position: fixed;
       top: 0;
       left: 0;
@@ -49,8 +49,8 @@
       padding: 16px 20px;
       z-index: 100;
       backdrop-filter: blur(12px);
-      background: rgba(0, 0, 0, 0.6);
-      border-bottom: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     }
     
     .nav-content {
@@ -61,10 +61,10 @@
       align-items: center;
     }
     
-    .logo { font-weight: 600; font-size: 15px; }
-    .nav-link { font-size: 14px; color: var(--text-muted); text-decoration: none; }
+    .logo { font-weight: 600; font-size: 15px; color: #fff; }
+    .nav-link { font-size: 14px; color: rgba(255,255,255,0.8); text-decoration: none; }
     
-    /* 3D Universe container */
+    /* Universe */
     .universe {
       position: fixed;
       top: 0;
@@ -85,7 +85,7 @@
       transform-style: preserve-3d;
     }
     
-    /* Panels floating in 3D space */
+    /* Panels */
     .panel {
       position: absolute;
       left: 0;
@@ -98,7 +98,6 @@
       transform-style: preserve-3d;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.6s ease;
       padding: 20px;
     }
     
@@ -113,22 +112,73 @@
       transform: translateZ(0);
     }
     
-    /* Z positions for each panel */
+    /* Panel animations - each unique */
     .panel-0 { transform: translateZ(0px); }
-    .panel-1 { transform: translateZ(-1500px); }
-    .panel-2 { transform: translateZ(-3000px); }
-    .panel-3 { transform: translateZ(-4500px); }
-    .panel-4 { transform: translateZ(-6000px); }
-    
-    /* Scroll spacer */
-    .scroll-spacer {
-      height: 600vh;
-      position: relative;
-      z-index: -1;
+    .panel-0 .panel-inner {
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .panel-0.active .panel-inner {
+      opacity: 1;
+      transform: scale(1);
     }
     
-    /* Hero */
-    .hero-content { text-align: center; }
+    .panel-1 { transform: translateZ(-1500px); }
+    .panel-1 .panel-inner {
+      opacity: 0;
+      transform: translateY(60px) rotateX(-10deg);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .panel-1.active .panel-inner {
+      opacity: 1;
+      transform: translateY(0) rotateX(0);
+    }
+    
+    .panel-2 { transform: translateZ(-3000px); }
+    .panel-2 .panel-inner {
+      opacity: 0;
+      transform: translateX(-80px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .panel-2.active .panel-inner {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    
+    .panel-3 { transform: translateZ(-4500px); }
+    .panel-3 .panel-inner {
+      opacity: 0;
+      transform: translateX(80px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .panel-3.active .panel-inner {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    
+    .panel-4 { transform: translateZ(-6000px); }
+    .panel-4 .panel-inner {
+      opacity: 0;
+      transform: scale(1.2);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .panel-4.active .panel-inner {
+      opacity: 1;
+      transform: scale(1);
+    }
+    
+    .scroll-spacer { height: 600vh; position: relative; z-index: -1; }
+    
+    /* Hero - white text on sky */
+    .hero-content {
+      text-align: center;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(20px);
+      padding: clamp(32px, 8vw, 56px);
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
     
     .hero-content h1 {
       font-size: clamp(36px, 10vw, 64px);
@@ -136,11 +186,12 @@
       letter-spacing: -0.04em;
       line-height: 0.95;
       margin-bottom: 20px;
+      color: #fff;
     }
     
     .hero-content p {
       font-size: clamp(15px, 4vw, 18px);
-      color: var(--text-muted);
+      color: rgba(255,255,255,0.8);
       margin-bottom: 32px;
       line-height: 1.5;
     }
@@ -149,190 +200,212 @@
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      background: var(--text);
-      color: var(--bg);
+      background: #fff;
+      color: var(--sky-top);
       padding: 16px 32px;
       border-radius: 12px;
       font-size: 15px;
-      font-weight: 500;
+      font-weight: 600;
       text-decoration: none;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
     }
     
     .cta-btn svg { width: 18px; height: 18px; }
     
     .scroll-hint {
-      margin-top: 60px;
+      margin-top: 40px;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 8px;
-      color: var(--text-muted);
+      color: rgba(255,255,255,0.6);
       font-size: 10px;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      animation: pulse 2s ease-in-out infinite;
+      animation: float 3s ease-in-out infinite;
     }
     
-    @keyframes pulse {
-      0%, 100% { opacity: 0.4; }
-      50% { opacity: 1; }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(10px); }
     }
     
-    /* Cards */
+    /* Cards - solid white background */
     .card {
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: clamp(24px, 5vw, 40px);
-      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: clamp(28px, 6vw, 48px);
+      box-shadow: 0 25px 80px rgba(0,0,0,0.15);
     }
     
     .section-label {
-      font-size: 10px;
-      font-weight: 500;
+      font-size: 11px;
+      font-weight: 600;
       color: var(--accent);
       text-transform: uppercase;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.15em;
       margin-bottom: 16px;
       text-align: center;
     }
     
     /* Pricing */
     .pricing-amount {
-      font-size: clamp(36px, 10vw, 52px);
+      font-size: clamp(40px, 12vw, 56px);
       font-weight: 700;
       letter-spacing: -0.04em;
       margin-bottom: 4px;
       text-align: center;
+      color: var(--text);
     }
     
     .pricing-amount span {
-      font-size: clamp(18px, 5vw, 26px);
+      font-size: clamp(20px, 6vw, 28px);
       color: var(--text-muted);
       font-weight: 500;
     }
     
     .pricing-details {
       color: var(--text-muted);
-      font-size: 13px;
-      margin-bottom: 24px;
+      font-size: 14px;
+      margin-bottom: 28px;
       text-align: center;
     }
     
-    .features {
-      list-style: none;
-      margin-bottom: 24px;
-    }
+    .features { list-style: none; margin-bottom: 28px; }
     
     .features li {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 13px;
-      color: rgba(255, 255, 255, 0.85);
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      font-size: 14px;
+      color: var(--text);
     }
     
     .features li:last-child { border-bottom: none; }
     
-    .check { color: var(--accent); flex-shrink: 0; width: 16px; height: 16px; }
+    .check { color: var(--accent); flex-shrink: 0; width: 18px; height: 18px; }
     
     .card-cta {
       display: block;
       width: 100%;
-      background: var(--text);
-      color: var(--bg);
-      padding: 14px;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 500;
+      background: var(--accent);
+      color: #fff;
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
       text-decoration: none;
       text-align: center;
+      box-shadow: 0 8px 30px rgba(14, 165, 233, 0.3);
     }
     
-    /* Steps */
+    /* Steps - dark cards */
+    .steps-wrapper {
+      background: var(--surface-dark);
+      border-radius: 24px;
+      padding: clamp(24px, 5vw, 40px);
+      box-shadow: 0 25px 80px rgba(0,0,0,0.2);
+    }
+    
+    .steps-wrapper .section-label { color: var(--sky-bottom); }
+    
     .steps { display: grid; gap: 12px; }
     
     .step {
       display: flex;
       gap: 14px;
-      padding: 16px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      backdrop-filter: blur(16px);
+      padding: 18px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
       align-items: flex-start;
     }
     
     .step-num {
-      width: 36px;
-      height: 36px;
-      background: rgba(34, 211, 238, 0.15);
-      border: 1px solid rgba(34, 211, 238, 0.3);
-      border-radius: 10px;
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--accent), #06b6d4);
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--accent);
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
       flex-shrink: 0;
     }
     
-    .step h3 { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
-    .step p { color: var(--text-muted); font-size: 12px; }
+    .step h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; color: #fff; }
+    .step p { color: rgba(255,255,255,0.6); font-size: 13px; }
     
     /* Fit */
+    .fit-wrapper {
+      background: var(--surface);
+      border-radius: 24px;
+      padding: clamp(24px, 5vw, 40px);
+      box-shadow: 0 25px 80px rgba(0,0,0,0.15);
+    }
+    
     .fit-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      gap: 16px;
     }
     
     .fit-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
-      backdrop-filter: blur(16px);
+      background: rgba(0,0,0,0.03);
+      border-radius: 16px;
+      padding: 24px;
     }
     
     .fit-card h3 {
-      font-size: 9px;
-      font-weight: 500;
+      font-size: 10px;
+      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.12em;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
     }
     
-    .fit-card.good h3 { color: var(--accent); }
-    .fit-card.bad h3 { color: #f87171; }
+    .fit-card.good h3 { color: #10b981; }
+    .fit-card.bad h3 { color: #ef4444; }
     
     .fit-list { list-style: none; }
     .fit-list li {
-      font-size: 11px;
-      color: rgba(255, 255, 255, 0.6);
-      padding: 6px 0;
-      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
     }
     .fit-list li:last-child { border-bottom: none; }
     
     /* Final CTA */
-    .final-cta { text-align: center; }
-    .final-cta h2 {
-      font-size: clamp(28px, 8vw, 48px);
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      margin-bottom: 20px;
-    }
-    .final-cta a {
-      color: var(--accent);
-      text-decoration: none;
-      font-size: 16px;
+    .final-cta {
+      text-align: center;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(20px);
+      padding: clamp(40px, 10vw, 72px);
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
     
-    /* Progress indicator */
+    .final-cta h2 {
+      font-size: clamp(32px, 9vw, 52px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+      color: #fff;
+    }
+    
+    .final-cta a {
+      color: var(--sky-bottom);
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 500;
+    }
+    
+    /* Progress */
     .progress {
       position: fixed;
       bottom: 24px;
@@ -341,24 +414,32 @@
       display: flex;
       gap: 8px;
       z-index: 50;
+      background: rgba(0,0,0,0.2);
+      padding: 8px 12px;
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
     }
     
     .progress-dot {
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.3);
       transition: all 0.3s;
     }
     
     .progress-dot.active {
-      background: var(--accent);
-      box-shadow: 0 0 10px var(--accent);
+      background: #fff;
+      box-shadow: 0 0 10px rgba(255,255,255,0.5);
+    }
+    
+    @media (max-width: 500px) {
+      .fit-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <canvas id="space"></canvas>
+  <canvas id="sky"></canvas>
   
   <nav>
     <div class="nav-content">
@@ -372,16 +453,18 @@
       
       <!-- Panel 0: Hero -->
       <div class="panel panel-0 active" data-index="0">
-        <div class="panel-inner hero-content">
-          <h1>Ship your MVP<br>in weeks.</h1>
-          <p>Fixed-price sprints for founders who move fast.</p>
-          <a href="https://cal.com" class="cta-btn">
-            Book a call
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-          <div class="scroll-hint">
-            <span>Scroll to explore</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        <div class="panel-inner">
+          <div class="hero-content">
+            <h1>Ship your MVP<br>in weeks.</h1>
+            <p>Fixed-price sprints for founders who move fast.</p>
+            <a href="https://cal.com" class="cta-btn">
+              Book a call
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <div class="scroll-hint">
+              <span>Scroll to explore</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+            </div>
           </div>
         </div>
       </div>
@@ -408,12 +491,14 @@
       <!-- Panel 2: Process -->
       <div class="panel panel-2" data-index="2">
         <div class="panel-inner">
-          <p class="section-label">Process</p>
-          <div class="steps">
-            <div class="step"><div class="step-num">1</div><div><h3>Discovery call</h3><p>15 min. Define scope, confirm fit.</p></div></div>
-            <div class="step"><div class="step-num">2</div><div><h3>Fixed quote</h3><p>Clear price. Deposit locks timeline.</p></div></div>
-            <div class="step"><div class="step-num">3</div><div><h3>Build sprint</h3><p>Async updates. Weekly demos optional.</p></div></div>
-            <div class="step"><div class="step-num">4</div><div><h3>Ship + handoff</h3><p>Deployed. Documented. Done.</p></div></div>
+          <div class="steps-wrapper">
+            <p class="section-label">Process</p>
+            <div class="steps">
+              <div class="step"><div class="step-num">1</div><div><h3>Discovery call</h3><p>15 min. Define scope, confirm fit.</p></div></div>
+              <div class="step"><div class="step-num">2</div><div><h3>Fixed quote</h3><p>Clear price. Deposit locks timeline.</p></div></div>
+              <div class="step"><div class="step-num">3</div><div><h3>Build sprint</h3><p>Async updates. Weekly demos optional.</p></div></div>
+              <div class="step"><div class="step-num">4</div><div><h3>Ship + handoff</h3><p>Deployed. Documented. Done.</p></div></div>
+            </div>
           </div>
         </div>
       </div>
@@ -421,25 +506,27 @@
       <!-- Panel 3: Fit -->
       <div class="panel panel-3" data-index="3">
         <div class="panel-inner">
-          <p class="section-label">Fit</p>
-          <div class="fit-grid">
-            <div class="fit-card good">
-              <h3>Good fit</h3>
-              <ul class="fit-list">
-                <li>Non-technical founders</li>
-                <li>Pre-seed / Seed</li>
-                <li>B2B SaaS</li>
-                <li>Internal tools</li>
-              </ul>
-            </div>
-            <div class="fit-card bad">
-              <h3>Not a fit</h3>
-              <ul class="fit-list">
-                <li>Idea-stage, no budget</li>
-                <li>Ongoing maintenance</li>
-                <li>Hourly billing</li>
-                <li>Open-ended scope</li>
-              </ul>
+          <div class="fit-wrapper">
+            <p class="section-label">Fit</p>
+            <div class="fit-grid">
+              <div class="fit-card good">
+                <h3>Good fit</h3>
+                <ul class="fit-list">
+                  <li>Non-technical founders</li>
+                  <li>Pre-seed / Seed</li>
+                  <li>B2B SaaS</li>
+                  <li>Internal tools</li>
+                </ul>
+              </div>
+              <div class="fit-card bad">
+                <h3>Not a fit</h3>
+                <ul class="fit-list">
+                  <li>Idea-stage, no budget</li>
+                  <li>Ongoing maintenance</li>
+                  <li>Hourly billing</li>
+                  <li>Open-ended scope</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -447,16 +534,17 @@
       
       <!-- Panel 4: Final CTA -->
       <div class="panel panel-4" data-index="4">
-        <div class="panel-inner final-cta">
-          <h2>Ready to ship?</h2>
-          <a href="mailto:aljensen92@gmail.com">aljensen92@gmail.com</a>
+        <div class="panel-inner">
+          <div class="final-cta">
+            <h2>Ready to ship?</h2>
+            <a href="mailto:aljensen92@gmail.com">aljensen92@gmail.com</a>
+          </div>
         </div>
       </div>
       
     </div>
   </div>
   
-  <!-- Progress dots -->
   <div class="progress">
     <div class="progress-dot active" data-index="0"></div>
     <div class="progress-dot" data-index="1"></div>
@@ -469,91 +557,136 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
-    // === STARFIELD ===
+    // === SKY + CLOUDS ===
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x000000, 0.0004);
     
-    const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 4000);
-    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('space'), antialias: true });
+    // Sky gradient background
+    const skyGeo = new THREE.PlaneGeometry(5000, 5000);
+    const skyMat = new THREE.ShaderMaterial({
+      uniforms: {
+        topColor: { value: new THREE.Color(0x0c4a6e) },
+        bottomColor: { value: new THREE.Color(0x7dd3fc) },
+        offset: { value: 0 },
+        exponent: { value: 0.6 }
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform vec3 topColor;
+        uniform vec3 bottomColor;
+        uniform float offset;
+        varying vec2 vUv;
+        void main() {
+          float h = vUv.y + offset;
+          gl_FragColor = vec4(mix(bottomColor, topColor, h), 1.0);
+        }
+      `,
+      side: THREE.DoubleSide,
+      depthWrite: false
+    });
+    const sky = new THREE.Mesh(skyGeo, skyMat);
+    sky.position.z = -2000;
+    scene.add(sky);
+    
+    const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 5000);
+    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('sky'), antialias: true });
     renderer.setSize(innerWidth, innerHeight);
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
     
-    // Stars
-    const starGeo = new THREE.BufferGeometry();
-    const starCount = 4000;
-    const pos = new Float32Array(starCount * 3);
-    const sizes = new Float32Array(starCount);
-    
-    for (let i = 0; i < starCount; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 2000;
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 2000;
-      pos[i * 3 + 2] = Math.random() * -6000;
-      sizes[i] = Math.random() * 2 + 0.5;
+    // Cloud texture
+    function createCloudTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = canvas.height = 256;
+      const ctx = canvas.getContext('2d');
+      
+      const gradient = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
+      gradient.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
+      gradient.addColorStop(0.4, 'rgba(255, 255, 255, 0.6)');
+      gradient.addColorStop(0.7, 'rgba(255, 255, 255, 0.2)');
+      gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 256, 256);
+      
+      return new THREE.CanvasTexture(canvas);
     }
     
-    starGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    starGeo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+    // Clouds
+    const cloudCount = 80;
+    const cloudGeo = new THREE.BufferGeometry();
+    const cloudPos = new Float32Array(cloudCount * 3);
+    const cloudSizes = new Float32Array(cloudCount);
     
-    const starMat = new THREE.ShaderMaterial({
-      uniforms: { time: { value: 0 } },
+    for (let i = 0; i < cloudCount; i++) {
+      cloudPos[i * 3] = (Math.random() - 0.5) * 3000;
+      cloudPos[i * 3 + 1] = (Math.random() - 0.5) * 1500;
+      cloudPos[i * 3 + 2] = Math.random() * -6000 - 200;
+      cloudSizes[i] = Math.random() * 300 + 150;
+    }
+    
+    cloudGeo.setAttribute('position', new THREE.BufferAttribute(cloudPos, 3));
+    cloudGeo.setAttribute('size', new THREE.BufferAttribute(cloudSizes, 1));
+    
+    const cloudMat = new THREE.ShaderMaterial({
+      uniforms: {
+        map: { value: createCloudTexture() },
+        time: { value: 0 }
+      },
       vertexShader: `
         attribute float size;
         varying float vSize;
         void main() {
           vSize = size;
           vec4 mv = modelViewMatrix * vec4(position, 1.0);
-          gl_PointSize = size * (200.0 / -mv.z);
+          gl_PointSize = size * (800.0 / -mv.z);
           gl_Position = projectionMatrix * mv;
         }
       `,
       fragmentShader: `
+        uniform sampler2D map;
         uniform float time;
         varying float vSize;
         void main() {
-          float d = length(gl_PointCoord - 0.5);
-          float a = 1.0 - smoothstep(0.0, 0.5, d);
-          a *= 0.6 + 0.4 * sin(time * 1.5 + vSize * 8.0);
-          gl_FragColor = vec4(1.0, 1.0, 1.0, a);
+          vec4 tex = texture2D(map, gl_PointCoord);
+          float alpha = tex.a * (0.7 + 0.3 * sin(time * 0.5 + vSize * 0.01));
+          gl_FragColor = vec4(1.0, 1.0, 1.0, alpha);
         }
       `,
       transparent: true,
-      blending: THREE.AdditiveBlending,
       depthWrite: false
     });
     
-    scene.add(new THREE.Points(starGeo, starMat));
+    scene.add(new THREE.Points(cloudGeo, cloudMat));
     
-    // Nebula
-    const nebGeo = new THREE.BufferGeometry();
-    const nebPos = new Float32Array(30 * 3);
-    for (let i = 0; i < 30; i++) {
-      nebPos[i * 3] = (Math.random() - 0.5) * 1500;
-      nebPos[i * 3 + 1] = (Math.random() - 0.5) * 1500;
-      nebPos[i * 3 + 2] = Math.random() * -5000 - 500;
+    // Small distant clouds
+    const smallCloudCount = 150;
+    const smallCloudGeo = new THREE.BufferGeometry();
+    const smallPos = new Float32Array(smallCloudCount * 3);
+    
+    for (let i = 0; i < smallCloudCount; i++) {
+      smallPos[i * 3] = (Math.random() - 0.5) * 4000;
+      smallPos[i * 3 + 1] = (Math.random() - 0.5) * 2000;
+      smallPos[i * 3 + 2] = Math.random() * -5500 - 500;
     }
-    nebGeo.setAttribute('position', new THREE.BufferAttribute(nebPos, 3));
     
-    const c = document.createElement('canvas');
-    c.width = c.height = 128;
-    const ctx = c.getContext('2d');
-    const g = ctx.createRadialGradient(64,64,0,64,64,64);
-    g.addColorStop(0, 'rgba(34,211,238,0.3)');
-    g.addColorStop(0.5, 'rgba(139,92,246,0.15)');
-    g.addColorStop(1, 'transparent');
-    ctx.fillStyle = g;
-    ctx.fillRect(0,0,128,128);
+    smallCloudGeo.setAttribute('position', new THREE.BufferAttribute(smallPos, 3));
     
-    const nebMat = new THREE.PointsMaterial({
-      size: 400,
-      map: new THREE.CanvasTexture(c),
+    const smallCloudMat = new THREE.PointsMaterial({
+      size: 80,
+      map: createCloudTexture(),
       transparent: true,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-      opacity: 0.12
+      opacity: 0.4,
+      depthWrite: false
     });
-    scene.add(new THREE.Points(nebGeo, nebMat));
     
-    // === SCROLL LOGIC ===
+    scene.add(new THREE.Points(smallCloudGeo, smallCloudMat));
+    
+    // === SCROLL ===
     const track = document.getElementById('track');
     const panels = document.querySelectorAll('.panel');
     const dots = document.querySelectorAll('.progress-dot');
@@ -564,14 +697,10 @@
     let targetZ = 0;
     let currentZ = 0;
     
-    function getScrollProgress() {
-      const maxScroll = document.body.scrollHeight - innerHeight;
-      return Math.min(scrollY / maxScroll, 1);
-    }
-    
     window.addEventListener('scroll', () => {
       scrollY = window.scrollY;
-      const progress = getScrollProgress();
+      const maxScroll = document.body.scrollHeight - innerHeight;
+      const progress = Math.min(scrollY / maxScroll, 1);
       targetZ = progress * (panelCount - 1) * zPerPanel;
     });
     
@@ -579,8 +708,7 @@
       const currentPanel = Math.round(currentZ / zPerPanel);
       
       panels.forEach((panel, i) => {
-        const isActive = i === currentPanel;
-        panel.classList.toggle('active', isActive);
+        panel.classList.toggle('active', i === currentPanel);
       });
       
       dots.forEach((dot, i) => {
@@ -590,16 +718,20 @@
       track.style.transform = `translateZ(${currentZ}px)`;
     }
     
-    // === ANIMATION ===
+    // === ANIMATE ===
     const clock = new THREE.Clock();
     
     function animate() {
       requestAnimationFrame(animate);
       
-      starMat.uniforms.time.value = clock.getElapsedTime();
+      const elapsed = clock.getElapsedTime();
+      cloudMat.uniforms.time.value = elapsed;
       
-      currentZ += (targetZ - currentZ) * 0.08;
-      camera.position.z = -currentZ * 0.3;
+      currentZ += (targetZ - currentZ) * 0.07;
+      camera.position.z = -currentZ * 0.25;
+      
+      // Shift sky gradient as we move
+      skyMat.uniforms.offset.value = currentZ * 0.00005;
       
       updatePanels();
       renderer.render(scene, camera);
