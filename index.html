@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
   <style>
     :root {
       --text: #1e293b;
@@ -49,62 +50,48 @@
       overflow: hidden;
     }
     
-    /* Birds - better design */
-    .bird {
+    /* Lottie birds */
+    .lottie-bird {
       position: absolute;
-      opacity: 0.6;
+      width: 150px;
+      height: 150px;
     }
     
-    .bird svg { fill: #475569; }
-    
-    .bird-1 { top: 12%; animation: flyRight 20s linear infinite; }
-    .bird-2 { top: 28%; animation: flyLeft 24s linear infinite; animation-delay: -6s; }
-    .bird-3 { top: 48%; animation: flyRight 18s linear infinite; animation-delay: -12s; }
-    .bird-4 { top: 68%; animation: flyLeft 22s linear infinite; animation-delay: -4s; }
-    .bird-5 { top: 85%; animation: flyRight 26s linear infinite; animation-delay: -16s; }
+    .bird-1 { top: 8%; animation: flyRight 18s linear infinite; }
+    .bird-2 { top: 25%; animation: flyLeft 22s linear infinite; animation-delay: -5s; }
+    .bird-3 { top: 45%; animation: flyRight 20s linear infinite; animation-delay: -10s; }
+    .bird-4 { top: 65%; animation: flyLeft 24s linear infinite; animation-delay: -3s; }
+    .bird-5 { top: 82%; animation: flyRight 19s linear infinite; animation-delay: -15s; }
     
     @keyframes flyRight {
-      0% { left: -120px; }
-      100% { left: calc(100% + 120px); }
+      0% { left: -180px; transform: scaleX(1); }
+      100% { left: calc(100% + 180px); transform: scaleX(1); }
     }
     
     @keyframes flyLeft {
-      0% { left: calc(100% + 120px); transform: scaleX(-1); }
-      100% { left: -120px; transform: scaleX(-1); }
+      0% { left: calc(100% + 180px); transform: scaleX(-1); }
+      100% { left: -180px; transform: scaleX(-1); }
     }
     
-    .bird svg {
-      animation: wingFlap 0.4s ease-in-out infinite;
-    }
-    
-    @keyframes wingFlap {
-      0%, 100% { transform: rotateX(0deg); }
-      50% { transform: rotateX(30deg); }
-    }
-    
-    /* Airplanes - clean modern design */
-    .plane {
+    /* Lottie planes */
+    .lottie-plane {
       position: absolute;
-      opacity: 0.4;
+      width: 200px;
+      height: 200px;
     }
     
-    .plane svg {
-      fill: #64748b;
-      filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
-    }
-    
-    .plane-1 { top: 8%; animation: planeRight 50s linear infinite; }
-    .plane-2 { top: 38%; animation: planeLeft 60s linear infinite; animation-delay: -20s; }
-    .plane-3 { top: 72%; animation: planeRight 55s linear infinite; animation-delay: -35s; }
+    .plane-1 { top: 5%; animation: planeRight 45s linear infinite; }
+    .plane-2 { top: 35%; animation: planeLeft 55s linear infinite; animation-delay: -18s; }
+    .plane-3 { top: 70%; animation: planeRight 50s linear infinite; animation-delay: -30s; }
     
     @keyframes planeRight {
-      0% { left: -200px; }
-      100% { left: calc(100% + 200px); }
+      0% { left: -220px; transform: scaleX(1); }
+      100% { left: calc(100% + 220px); transform: scaleX(1); }
     }
     
     @keyframes planeLeft {
-      0% { left: calc(100% + 200px); transform: scaleX(-1); }
-      100% { left: -200px; transform: scaleX(-1); }
+      0% { left: calc(100% + 220px); transform: scaleX(-1); }
+      100% { left: -220px; transform: scaleX(-1); }
     }
     
     /* Nav */
@@ -458,78 +445,27 @@
     @media (max-width: 500px) {
       .fit-grid { grid-template-columns: 1fr; }
       .happy-cloud { width: 60px; height: 45px; top: -20px; right: -10px; }
+      .lottie-bird { width: 100px; height: 100px; }
+      .lottie-plane { width: 140px; height: 140px; }
     }
   </style>
 </head>
 <body>
   <canvas id="sky"></canvas>
   
-  <!-- Flying birds and planes -->
+  <!-- Flying Lottie animations -->
   <div class="flying-objects">
-    <!-- Birds - stylized flying V shapes -->
-    <div class="bird bird-1">
-      <svg width="100" height="40" viewBox="0 0 100 40">
-        <path d="M50 20 C40 5, 20 5, 0 15 C20 12, 40 15, 50 20 C60 15, 80 12, 100 15 C80 5, 60 5, 50 20 Z"/>
-      </svg>
-    </div>
-    <div class="bird bird-2">
-      <svg width="80" height="32" viewBox="0 0 100 40">
-        <path d="M50 20 C40 5, 20 5, 0 15 C20 12, 40 15, 50 20 C60 15, 80 12, 100 15 C80 5, 60 5, 50 20 Z"/>
-      </svg>
-    </div>
-    <div class="bird bird-3">
-      <svg width="90" height="36" viewBox="0 0 100 40">
-        <path d="M50 20 C40 5, 20 5, 0 15 C20 12, 40 15, 50 20 C60 15, 80 12, 100 15 C80 5, 60 5, 50 20 Z"/>
-      </svg>
-    </div>
-    <div class="bird bird-4">
-      <svg width="70" height="28" viewBox="0 0 100 40">
-        <path d="M50 20 C40 5, 20 5, 0 15 C20 12, 40 15, 50 20 C60 15, 80 12, 100 15 C80 5, 60 5, 50 20 Z"/>
-      </svg>
-    </div>
-    <div class="bird bird-5">
-      <svg width="85" height="34" viewBox="0 0 100 40">
-        <path d="M50 20 C40 5, 20 5, 0 15 C20 12, 40 15, 50 20 C60 15, 80 12, 100 15 C80 5, 60 5, 50 20 Z"/>
-      </svg>
-    </div>
+    <!-- Birds -->
+    <div class="lottie-bird bird-1" id="bird1"></div>
+    <div class="lottie-bird bird-2" id="bird2"></div>
+    <div class="lottie-bird bird-3" id="bird3"></div>
+    <div class="lottie-bird bird-4" id="bird4"></div>
+    <div class="lottie-bird bird-5" id="bird5"></div>
     
-    <!-- Airplanes - clean passenger jet silhouette -->
-    <div class="plane plane-1">
-      <svg width="160" height="50" viewBox="0 0 200 60">
-        <ellipse cx="100" cy="30" rx="85" ry="12"/>
-        <path d="M20 30 L60 30 L70 8 L75 8 L68 30"/>
-        <path d="M180 30 L185 28 L190 28 L190 32 L185 32 L180 30"/>
-        <path d="M60 30 L65 42 L55 48 L50 48 L58 38"/>
-        <ellipse cx="40" cy="30" rx="8" ry="6" fill="#94a3b8"/>
-        <ellipse cx="70" cy="30" rx="6" ry="4" fill="#94a3b8"/>
-        <ellipse cx="100" cy="30" rx="6" ry="4" fill="#94a3b8"/>
-        <ellipse cx="130" cy="30" rx="6" ry="4" fill="#94a3b8"/>
-      </svg>
-    </div>
-    <div class="plane plane-2">
-      <svg width="140" height="44" viewBox="0 0 200 60">
-        <ellipse cx="100" cy="30" rx="85" ry="12"/>
-        <path d="M20 30 L60 30 L70 8 L75 8 L68 30"/>
-        <path d="M180 30 L185 28 L190 28 L190 32 L185 32 L180 30"/>
-        <path d="M60 30 L65 42 L55 48 L50 48 L58 38"/>
-        <ellipse cx="40" cy="30" rx="8" ry="6" fill="#94a3b8"/>
-        <ellipse cx="70" cy="30" rx="6" ry="4" fill="#94a3b8"/>
-        <ellipse cx="100" cy="30" rx="6" ry="4" fill="#94a3b8"/>
-        <ellipse cx="130" cy="30" rx="6" ry="4" fill="#94a3b8"/>
-      </svg>
-    </div>
-    <div class="plane plane-3">
-      <svg width="120" height="38" viewBox="0 0 200 60">
-        <ellipse cx="100" cy="30" rx="85" ry="12"/>
-        <path d="M20 30 L60 30 L70 8 L75 8 L68 30"/>
-        <path d="M180 30 L185 28 L190 28 L190 32 L185 32 L180 30"/>
-        <path d="M60 30 L65 42 L55 48 L50 48 L58 38"/>
-        <ellipse cx="40" cy="30" rx="8" ry="6" fill="#94a3b8"/>
-        <ellipse cx="70" cy="30" rx="6" ry="4" fill="#94a3b8"/>
-        <ellipse cx="100" cy="30" rx="6" ry="4" fill="#94a3b8"/>
-        <ellipse cx="130" cy="30" rx="6" ry="4" fill="#94a3b8"/>
-      </svg>
-    </div>
+    <!-- Planes -->
+    <div class="lottie-plane plane-1" id="plane1"></div>
+    <div class="lottie-plane plane-2" id="plane2"></div>
+    <div class="lottie-plane plane-3" id="plane3"></div>
   </div>
   
   <nav>
@@ -545,7 +481,6 @@
       <div class="panel panel-0 active" data-index="0">
         <div class="panel-inner">
           <div class="hero-content">
-            <!-- Smiling cloud -->
             <svg class="happy-cloud" viewBox="0 0 100 70">
               <ellipse cx="50" cy="45" rx="35" ry="22" fill="#e0f2fe"/>
               <ellipse cx="25" cy="50" rx="20" ry="15" fill="#e0f2fe"/>
@@ -704,6 +639,38 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
+    // Initialize Lottie animations
+    const birdConfig = {
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      path: 'animations/bird.json'
+    };
+    
+    const planeConfig = {
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      path: 'animations/plane.json'
+    };
+    
+    // Birds
+    for (let i = 1; i <= 5; i++) {
+      lottie.loadAnimation({
+        ...birdConfig,
+        container: document.getElementById('bird' + i)
+      });
+    }
+    
+    // Planes
+    for (let i = 1; i <= 3; i++) {
+      lottie.loadAnimation({
+        ...planeConfig,
+        container: document.getElementById('plane' + i)
+      });
+    }
+    
+    // Three.js sky
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf0f9ff);
     
