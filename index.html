@@ -16,6 +16,20 @@
       --accent: #0ea5e9;
       --blue: #38bdf8;
       --yellow: #fbbf24;
+      --bg: #f0f9ff;
+      --card-bg: #fff;
+      --card-shadow: rgba(0,0,0,0.1);
+    }
+    
+    [data-theme="dark"] {
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent: #a78bfa;
+      --blue: #818cf8;
+      --yellow: #c084fc;
+      --bg: #0f0f23;
+      --card-bg: rgba(30, 30, 60, 0.9);
+      --card-shadow: rgba(0,0,0,0.4);
     }
     
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -23,9 +37,10 @@
     
     body {
       font-family: 'Inter', -apple-system, system-ui, sans-serif;
-      background: #fff;
+      background: var(--bg);
       color: var(--text);
       -webkit-font-smoothing: antialiased;
+      transition: background 0.5s, color 0.5s;
     }
     
     #sky {
@@ -35,7 +50,6 @@
       width: 100%;
       height: 100%;
       z-index: 0;
-      background: linear-gradient(180deg, #e0f2fe 0%, #ffffff 100%);
     }
     
     /* Flying objects */
@@ -50,7 +64,15 @@
       overflow: hidden;
     }
     
-    /* Lottie birds */
+    .light-mode-objects, .dark-mode-objects {
+      transition: opacity 0.5s;
+    }
+    
+    [data-theme="dark"] .light-mode-objects { opacity: 0; pointer-events: none; }
+    [data-theme="dark"] .dark-mode-objects { opacity: 1; }
+    .dark-mode-objects { opacity: 0; pointer-events: none; }
+    
+    /* Light mode - birds */
     .lottie-bird {
       position: absolute;
       width: 150px;
@@ -63,17 +85,7 @@
     .bird-4 { top: 65%; animation: flyLeft 24s linear infinite; animation-delay: -3s; }
     .bird-5 { top: 82%; animation: flyRight 19s linear infinite; animation-delay: -15s; }
     
-    @keyframes flyRight {
-      0% { left: -180px; transform: scaleX(1); }
-      100% { left: calc(100% + 180px); transform: scaleX(1); }
-    }
-    
-    @keyframes flyLeft {
-      0% { left: calc(100% + 180px); transform: scaleX(-1); }
-      100% { left: -180px; transform: scaleX(-1); }
-    }
-    
-    /* Lottie planes */
+    /* Light mode - planes */
     .lottie-plane {
       position: absolute;
       width: 200px;
@@ -84,15 +96,98 @@
     .plane-2 { top: 35%; animation: planeLeft 55s linear infinite; animation-delay: -18s; }
     .plane-3 { top: 70%; animation: planeRight 50s linear infinite; animation-delay: -30s; }
     
+    /* Dark mode - spacemen */
+    .lottie-spaceman {
+      position: absolute;
+      width: 180px;
+      height: 180px;
+    }
+    
+    .spaceman-1 { top: 10%; animation: floatRight 25s linear infinite; }
+    .spaceman-2 { top: 40%; animation: floatLeft 30s linear infinite; animation-delay: -8s; }
+    .spaceman-3 { top: 70%; animation: floatRight 28s linear infinite; animation-delay: -18s; }
+    
+    /* Dark mode - rockets */
+    .lottie-rocket {
+      position: absolute;
+      width: 160px;
+      height: 160px;
+    }
+    
+    .rocket-1 { top: 5%; animation: rocketRight 20s linear infinite; }
+    .rocket-2 { top: 50%; animation: rocketLeft 25s linear infinite; animation-delay: -10s; }
+    .rocket-3 { top: 85%; animation: rocketRight 22s linear infinite; animation-delay: -15s; }
+    
+    @keyframes flyRight {
+      0% { left: -180px; transform: scaleX(1); }
+      100% { left: calc(100% + 180px); transform: scaleX(1); }
+    }
+    
+    @keyframes flyLeft {
+      0% { left: calc(100% + 180px); transform: scaleX(-1); }
+      100% { left: -180px; transform: scaleX(-1); }
+    }
+    
     @keyframes planeRight {
-      0% { left: -220px; transform: scaleX(1); }
-      100% { left: calc(100% + 220px); transform: scaleX(1); }
+      0% { left: -220px; }
+      100% { left: calc(100% + 220px); }
     }
     
     @keyframes planeLeft {
       0% { left: calc(100% + 220px); transform: scaleX(-1); }
       100% { left: -220px; transform: scaleX(-1); }
     }
+    
+    @keyframes floatRight {
+      0% { left: -200px; transform: rotate(-10deg); }
+      50% { transform: rotate(10deg); }
+      100% { left: calc(100% + 200px); transform: rotate(-10deg); }
+    }
+    
+    @keyframes floatLeft {
+      0% { left: calc(100% + 200px); transform: scaleX(-1) rotate(-10deg); }
+      50% { transform: scaleX(-1) rotate(10deg); }
+      100% { left: -200px; transform: scaleX(-1) rotate(-10deg); }
+    }
+    
+    @keyframes rocketRight {
+      0% { left: -180px; transform: rotate(15deg); }
+      100% { left: calc(100% + 180px); transform: rotate(15deg); }
+    }
+    
+    @keyframes rocketLeft {
+      0% { left: calc(100% + 180px); transform: scaleX(-1) rotate(15deg); }
+      100% { left: -180px; transform: scaleX(-1) rotate(15deg); }
+    }
+    
+    /* Theme toggle */
+    .theme-toggle {
+      position: fixed;
+      top: 16px;
+      right: 80px;
+      z-index: 101;
+      background: var(--card-bg);
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px var(--card-shadow);
+      transition: all 0.3s;
+    }
+    
+    .theme-toggle:hover { transform: scale(1.05); }
+    
+    .theme-toggle svg { width: 22px; height: 22px; fill: var(--text); }
+    
+    .sun-icon { display: block; }
+    .moon-icon { display: none; }
+    
+    [data-theme="dark"] .sun-icon { display: none; }
+    [data-theme="dark"] .moon-icon { display: block; }
     
     /* Nav */
     nav {
@@ -105,6 +200,12 @@
       background: rgba(255, 255, 255, 0.9);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid rgba(0,0,0,0.05);
+      transition: background 0.5s;
+    }
+    
+    [data-theme="dark"] nav {
+      background: rgba(15, 15, 35, 0.9);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
     }
     
     .nav-content {
@@ -180,7 +281,7 @@
     
     .scroll-spacer { height: 600vh; position: relative; z-index: -1; }
     
-    /* Smiling cloud mascot */
+    /* Smiling cloud / star mascot */
     .happy-cloud {
       position: absolute;
       top: -30px;
@@ -190,10 +291,7 @@
       animation: cloudBob 3s ease-in-out infinite;
     }
     
-    .happy-cloud-left {
-      right: auto;
-      left: -20px;
-    }
+    .happy-cloud-left { right: auto; left: -20px; }
     
     @keyframes cloudBob {
       0%, 100% { transform: translateY(0); }
@@ -202,11 +300,16 @@
     
     /* Cards */
     .card {
-      background: #fff;
+      background: var(--card-bg);
       border-radius: 24px;
       padding: clamp(28px, 6vw, 48px);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.04);
+      box-shadow: 0 20px 60px var(--card-shadow);
       position: relative;
+      transition: background 0.5s, box-shadow 0.5s;
+    }
+    
+    [data-theme="dark"] .card {
+      border: 1px solid rgba(255,255,255,0.1);
     }
     
     .section-label {
@@ -221,11 +324,16 @@
     
     .hero-content {
       text-align: center;
-      background: #fff;
+      background: var(--card-bg);
       padding: clamp(32px, 8vw, 56px);
       border-radius: 28px;
-      box-shadow: 0 25px 80px rgba(0,0,0,0.12);
+      box-shadow: 0 25px 80px var(--card-shadow);
       position: relative;
+      transition: background 0.5s;
+    }
+    
+    [data-theme="dark"] .hero-content {
+      border: 1px solid rgba(255,255,255,0.1);
     }
     
     .hero-content h1 {
@@ -254,6 +362,11 @@
       font-weight: 600;
       text-decoration: none;
       box-shadow: 0 10px 30px rgba(14, 165, 233, 0.3);
+      transition: background 0.3s;
+    }
+    
+    [data-theme="dark"] .cta-btn {
+      box-shadow: 0 10px 30px rgba(167, 139, 250, 0.3);
     }
     
     .cta-btn svg { width: 18px; height: 18px; }
@@ -304,7 +417,7 @@
       align-items: center;
       gap: 12px;
       padding: 12px 0;
-      border-bottom: 1px solid rgba(0,0,0,0.06);
+      border-bottom: 1px solid rgba(128,128,128,0.15);
       font-size: 14px;
     }
     
@@ -326,11 +439,16 @@
     }
     
     .steps-card {
-      background: #fff;
+      background: var(--card-bg);
       border-radius: 24px;
       padding: clamp(24px, 5vw, 40px);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+      box-shadow: 0 20px 60px var(--card-shadow);
       position: relative;
+      transition: background 0.5s;
+    }
+    
+    [data-theme="dark"] .steps-card {
+      border: 1px solid rgba(255,255,255,0.1);
     }
     
     .steps { display: grid; gap: 12px; }
@@ -339,7 +457,7 @@
       display: flex;
       gap: 14px;
       padding: 18px;
-      background: #f8fafc;
+      background: rgba(128,128,128,0.08);
       border-radius: 14px;
       align-items: flex-start;
     }
@@ -362,17 +480,22 @@
     .step p { color: var(--text-muted); font-size: 13px; }
     
     .fit-card-wrapper {
-      background: #fff;
+      background: var(--card-bg);
       border-radius: 24px;
       padding: clamp(24px, 5vw, 40px);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+      box-shadow: 0 20px 60px var(--card-shadow);
       position: relative;
+      transition: background 0.5s;
+    }
+    
+    [data-theme="dark"] .fit-card-wrapper {
+      border: 1px solid rgba(255,255,255,0.1);
     }
     
     .fit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     
     .fit-card {
-      background: #f8fafc;
+      background: rgba(128,128,128,0.08);
       border-radius: 14px;
       padding: 20px;
     }
@@ -397,11 +520,16 @@
     
     .final-cta {
       text-align: center;
-      background: #fff;
+      background: var(--card-bg);
       padding: clamp(40px, 10vw, 72px);
       border-radius: 28px;
-      box-shadow: 0 25px 80px rgba(0,0,0,0.12);
+      box-shadow: 0 25px 80px var(--card-shadow);
       position: relative;
+      transition: background 0.5s;
+    }
+    
+    [data-theme="dark"] .final-cta {
+      border: 1px solid rgba(255,255,255,0.1);
     }
     
     .final-cta h2 {
@@ -426,17 +554,18 @@
       display: flex;
       gap: 8px;
       z-index: 50;
-      background: rgba(255,255,255,0.9);
+      background: var(--card-bg);
       padding: 8px 14px;
       border-radius: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 20px var(--card-shadow);
+      transition: background 0.5s;
     }
     
     .progress-dot {
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: rgba(0, 0, 0, 0.15);
+      background: rgba(128, 128, 128, 0.3);
       transition: all 0.3s;
     }
     
@@ -445,27 +574,44 @@
     @media (max-width: 500px) {
       .fit-grid { grid-template-columns: 1fr; }
       .happy-cloud { width: 60px; height: 45px; top: -20px; right: -10px; }
-      .lottie-bird { width: 100px; height: 100px; }
-      .lottie-plane { width: 140px; height: 140px; }
+      .lottie-bird, .lottie-spaceman { width: 100px; height: 100px; }
+      .lottie-plane, .lottie-rocket { width: 120px; height: 120px; }
+      .theme-toggle { right: 70px; width: 38px; height: 38px; }
     }
   </style>
 </head>
 <body>
   <canvas id="sky"></canvas>
   
+  <!-- Theme toggle -->
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    <svg class="sun-icon" viewBox="0 0 24 24"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+    <svg class="moon-icon" viewBox="0 0 24 24"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+  </button>
+  
   <!-- Flying Lottie animations -->
   <div class="flying-objects">
-    <!-- Birds -->
-    <div class="lottie-bird bird-1" id="bird1"></div>
-    <div class="lottie-bird bird-2" id="bird2"></div>
-    <div class="lottie-bird bird-3" id="bird3"></div>
-    <div class="lottie-bird bird-4" id="bird4"></div>
-    <div class="lottie-bird bird-5" id="bird5"></div>
+    <!-- Light mode: Birds + Planes -->
+    <div class="light-mode-objects">
+      <div class="lottie-bird bird-1" id="bird1"></div>
+      <div class="lottie-bird bird-2" id="bird2"></div>
+      <div class="lottie-bird bird-3" id="bird3"></div>
+      <div class="lottie-bird bird-4" id="bird4"></div>
+      <div class="lottie-bird bird-5" id="bird5"></div>
+      <div class="lottie-plane plane-1" id="plane1"></div>
+      <div class="lottie-plane plane-2" id="plane2"></div>
+      <div class="lottie-plane plane-3" id="plane3"></div>
+    </div>
     
-    <!-- Planes -->
-    <div class="lottie-plane plane-1" id="plane1"></div>
-    <div class="lottie-plane plane-2" id="plane2"></div>
-    <div class="lottie-plane plane-3" id="plane3"></div>
+    <!-- Dark mode: Spacemen + Rockets -->
+    <div class="dark-mode-objects">
+      <div class="lottie-spaceman spaceman-1" id="spaceman1"></div>
+      <div class="lottie-spaceman spaceman-2" id="spaceman2"></div>
+      <div class="lottie-spaceman spaceman-3" id="spaceman3"></div>
+      <div class="lottie-rocket rocket-1" id="rocket1"></div>
+      <div class="lottie-rocket rocket-2" id="rocket2"></div>
+      <div class="lottie-rocket rocket-3" id="rocket3"></div>
+    </div>
   </div>
   
   <nav>
@@ -639,43 +785,35 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
+    let isDark = false;
+    let scene, camera, renderer;
+    let lightClouds = [], darkStars = [], darkNebulas = [];
+    
+    // Theme toggle
+    function toggleTheme() {
+      isDark = !isDark;
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+      updateSky();
+    }
+    
     // Initialize Lottie animations
-    const birdConfig = {
-      renderer: 'svg',
-      loop: true,
-      autoplay: true,
-      path: 'animations/bird.json'
-    };
+    const birdConfig = { renderer: 'svg', loop: true, autoplay: true, path: 'animations/bird.json' };
+    const planeConfig = { renderer: 'svg', loop: true, autoplay: true, path: 'animations/plane.json' };
+    const spacemanConfig = { renderer: 'svg', loop: true, autoplay: true, path: 'animations/spaceman.json' };
+    const rocketConfig = { renderer: 'svg', loop: true, autoplay: true, path: 'animations/rocket.json' };
     
-    const planeConfig = {
-      renderer: 'svg',
-      loop: true,
-      autoplay: true,
-      path: 'animations/plane.json'
-    };
+    // Light mode animations
+    for (let i = 1; i <= 5; i++) lottie.loadAnimation({ ...birdConfig, container: document.getElementById('bird' + i) });
+    for (let i = 1; i <= 3; i++) lottie.loadAnimation({ ...planeConfig, container: document.getElementById('plane' + i) });
     
-    // Birds
-    for (let i = 1; i <= 5; i++) {
-      lottie.loadAnimation({
-        ...birdConfig,
-        container: document.getElementById('bird' + i)
-      });
-    }
+    // Dark mode animations
+    for (let i = 1; i <= 3; i++) lottie.loadAnimation({ ...spacemanConfig, container: document.getElementById('spaceman' + i) });
+    for (let i = 1; i <= 3; i++) lottie.loadAnimation({ ...rocketConfig, container: document.getElementById('rocket' + i) });
     
-    // Planes
-    for (let i = 1; i <= 3; i++) {
-      lottie.loadAnimation({
-        ...planeConfig,
-        container: document.getElementById('plane' + i)
-      });
-    }
-    
-    // Three.js sky
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xf0f9ff);
-    
-    const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 5000);
-    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('sky'), antialias: true });
+    // Three.js setup
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 5000);
+    renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('sky'), antialias: true });
     renderer.setSize(innerWidth, innerHeight);
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
     
@@ -686,53 +824,101 @@
       const gradient = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
       gradient.addColorStop(0, color1);
       gradient.addColorStop(0.5, color2);
-      gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, 256, 256);
       return new THREE.CanvasTexture(canvas);
     }
     
-    // Blue clouds
-    const blueGeo = new THREE.BufferGeometry();
-    const bluePos = new Float32Array(35 * 3);
-    for (let i = 0; i < 35; i++) {
-      bluePos[i * 3] = (Math.random() - 0.5) * 3000;
-      bluePos[i * 3 + 1] = (Math.random() - 0.5) * 1500;
-      bluePos[i * 3 + 2] = Math.random() * -6000 - 200;
+    // Light mode clouds
+    function createLightClouds() {
+      const colors = [
+        ['rgba(147, 197, 253, 0.6)', 'rgba(147, 197, 253, 0.2)'],
+        ['rgba(253, 224, 71, 0.5)', 'rgba(253, 224, 71, 0.15)'],
+        ['rgba(255, 255, 255, 0.8)', 'rgba(255, 255, 255, 0.3)']
+      ];
+      
+      colors.forEach((c, idx) => {
+        const geo = new THREE.BufferGeometry();
+        const count = 35 + idx * 5;
+        const pos = new Float32Array(count * 3);
+        for (let i = 0; i < count; i++) {
+          pos[i * 3] = (Math.random() - 0.5) * 3000;
+          pos[i * 3 + 1] = (Math.random() - 0.5) * 1500;
+          pos[i * 3 + 2] = Math.random() * -6000 - 200;
+        }
+        geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+        const mat = new THREE.PointsMaterial({
+          size: 350 + idx * 20,
+          map: createCloudTexture(c[0], c[1]),
+          transparent: true, depthWrite: false
+        });
+        const points = new THREE.Points(geo, mat);
+        lightClouds.push(points);
+        scene.add(points);
+      });
     }
-    blueGeo.setAttribute('position', new THREE.BufferAttribute(bluePos, 3));
-    scene.add(new THREE.Points(blueGeo, new THREE.PointsMaterial({
-      size: 400, map: createCloudTexture('rgba(147, 197, 253, 0.6)', 'rgba(147, 197, 253, 0.2)'),
-      transparent: true, depthWrite: false
-    })));
     
-    // Yellow clouds
-    const yellowGeo = new THREE.BufferGeometry();
-    const yellowPos = new Float32Array(30 * 3);
-    for (let i = 0; i < 30; i++) {
-      yellowPos[i * 3] = (Math.random() - 0.5) * 3000;
-      yellowPos[i * 3 + 1] = (Math.random() - 0.5) * 1500;
-      yellowPos[i * 3 + 2] = Math.random() * -5500 - 400;
+    // Dark mode stars
+    function createDarkStars() {
+      const starGeo = new THREE.BufferGeometry();
+      const starCount = 2000;
+      const starPos = new Float32Array(starCount * 3);
+      for (let i = 0; i < starCount; i++) {
+        starPos[i * 3] = (Math.random() - 0.5) * 4000;
+        starPos[i * 3 + 1] = (Math.random() - 0.5) * 2500;
+        starPos[i * 3 + 2] = Math.random() * -6000 - 100;
+      }
+      starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+      const starMat = new THREE.PointsMaterial({
+        size: 3, color: 0xffffff, transparent: true, opacity: 0
+      });
+      const stars = new THREE.Points(starGeo, starMat);
+      darkStars.push(stars);
+      scene.add(stars);
+      
+      // Nebulas
+      const nebulaColors = [
+        ['rgba(167, 139, 250, 0.4)', 'rgba(167, 139, 250, 0.1)'],
+        ['rgba(236, 72, 153, 0.3)', 'rgba(236, 72, 153, 0.08)'],
+        ['rgba(59, 130, 246, 0.35)', 'rgba(59, 130, 246, 0.1)']
+      ];
+      
+      nebulaColors.forEach(c => {
+        const geo = new THREE.BufferGeometry();
+        const count = 20;
+        const pos = new Float32Array(count * 3);
+        for (let i = 0; i < count; i++) {
+          pos[i * 3] = (Math.random() - 0.5) * 3500;
+          pos[i * 3 + 1] = (Math.random() - 0.5) * 2000;
+          pos[i * 3 + 2] = Math.random() * -5500 - 500;
+        }
+        geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+        const mat = new THREE.PointsMaterial({
+          size: 500, map: createCloudTexture(c[0], c[1]),
+          transparent: true, depthWrite: false, opacity: 0
+        });
+        const nebula = new THREE.Points(geo, mat);
+        darkNebulas.push(nebula);
+        scene.add(nebula);
+      });
     }
-    yellowGeo.setAttribute('position', new THREE.BufferAttribute(yellowPos, 3));
-    scene.add(new THREE.Points(yellowGeo, new THREE.PointsMaterial({
-      size: 350, map: createCloudTexture('rgba(253, 224, 71, 0.5)', 'rgba(253, 224, 71, 0.15)'),
-      transparent: true, depthWrite: false
-    })));
     
-    // White clouds
-    const whiteGeo = new THREE.BufferGeometry();
-    const whitePos = new Float32Array(45 * 3);
-    for (let i = 0; i < 45; i++) {
-      whitePos[i * 3] = (Math.random() - 0.5) * 3500;
-      whitePos[i * 3 + 1] = (Math.random() - 0.5) * 1800;
-      whitePos[i * 3 + 2] = Math.random() * -6000 - 100;
+    createLightClouds();
+    createDarkStars();
+    
+    function updateSky() {
+      const targetLight = isDark ? 0 : 1;
+      const targetDark = isDark ? 1 : 0;
+      
+      scene.background = new THREE.Color(isDark ? 0x0f0f23 : 0xf0f9ff);
+      
+      lightClouds.forEach(c => { c.material.opacity = targetLight; });
+      darkStars.forEach(s => { s.material.opacity = targetDark; });
+      darkNebulas.forEach(n => { n.material.opacity = targetDark; });
     }
-    whiteGeo.setAttribute('position', new THREE.BufferAttribute(whitePos, 3));
-    scene.add(new THREE.Points(whiteGeo, new THREE.PointsMaterial({
-      size: 320, map: createCloudTexture('rgba(255, 255, 255, 0.8)', 'rgba(255, 255, 255, 0.3)'),
-      transparent: true, depthWrite: false
-    })));
+    
+    updateSky();
     
     const track = document.getElementById('track');
     const panels = document.querySelectorAll('.panel');
