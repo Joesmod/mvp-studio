@@ -10,122 +10,41 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #050508;
-      --surface: rgba(20, 20, 28, 0.6);
-      --border: rgba(255, 255, 255, 0.06);
+      --bg: #000;
+      --surface: rgba(10, 10, 15, 0.85);
+      --border: rgba(255, 255, 255, 0.08);
       --text: #fafafa;
       --text-muted: #71717a;
       --accent: #22d3ee;
     }
     
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     
-    html {
-      scroll-behavior: smooth;
-    }
+    html { scroll-behavior: smooth; }
     
     body {
       font-family: 'Inter', -apple-system, system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
-      font-size: 16px;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
     
-    /* Floating blobs */
-    .blobs {
+    /* WebGL Canvas */
+    #space {
       position: fixed;
-      inset: 0;
-      z-index: -1;
-      overflow: hidden;
-    }
-    
-    .blob {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.5;
-      animation: float 25s ease-in-out infinite;
-    }
-    
-    .blob-1 {
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(34, 211, 238, 0.25) 0%, transparent 70%);
-      top: -10%;
-      left: -10%;
-      animation-delay: 0s;
-    }
-    
-    .blob-2 {
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%);
-      top: 30%;
-      right: -15%;
-      animation-delay: -8s;
-      animation-duration: 30s;
-    }
-    
-    .blob-3 {
-      width: 450px;
-      height: 450px;
-      background: radial-gradient(circle, rgba(236, 72, 153, 0.15) 0%, transparent 70%);
-      bottom: 20%;
-      left: -10%;
-      animation-delay: -15s;
-      animation-duration: 35s;
-    }
-    
-    .blob-4 {
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, rgba(34, 211, 238, 0.2) 0%, transparent 70%);
-      bottom: -10%;
-      right: 20%;
-      animation-delay: -20s;
-      animation-duration: 28s;
-    }
-    
-    @keyframes float {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      25% { transform: translate(50px, -30px) scale(1.05); }
-      50% { transform: translate(-20px, 40px) scale(0.95); }
-      75% { transform: translate(30px, 20px) scale(1.02); }
-    }
-    
-    /* Space scroll container */
-    .space {
-      position: relative;
-    }
-    
-    /* Sections float in */
-    section {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-    
-    .section-inner {
-      opacity: 0;
-      transform: translateY(60px) scale(0.96);
-      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      top: 0;
+      left: 0;
       width: 100%;
-      max-width: 720px;
-      padding: 0 24px;
+      height: 100%;
+      z-index: 0;
     }
     
-    section.visible .section-inner {
-      opacity: 1;
-      transform: translateY(0) scale(1);
+    /* Content layer */
+    .content {
+      position: relative;
+      z-index: 1;
     }
     
     /* Nav */
@@ -134,15 +53,15 @@
       top: 0;
       left: 0;
       right: 0;
-      padding: 20px 24px;
+      padding: 20px 32px;
       z-index: 100;
       backdrop-filter: blur(12px);
-      background: rgba(5, 5, 8, 0.5);
+      background: rgba(0, 0, 0, 0.3);
       border-bottom: 1px solid var(--border);
     }
     
     .nav-content {
-      max-width: 720px;
+      max-width: 900px;
       margin: 0 auto;
       display: flex;
       justify-content: space-between;
@@ -162,218 +81,225 @@
       transition: color 0.2s;
     }
     
-    .nav-link:hover {
-      color: var(--text);
+    .nav-link:hover { color: var(--text); }
+    
+    /* Sections */
+    section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 24px;
+    }
+    
+    .section-inner {
+      max-width: 800px;
+      width: 100%;
+      opacity: 0;
+      transform: translateY(80px);
+      transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    section.visible .section-inner {
+      opacity: 1;
+      transform: translateY(0);
     }
     
     /* Hero */
     .hero {
-      padding-top: 100px;
+      min-height: 100vh;
+      padding-top: 80px;
     }
     
     .hero h1 {
-      font-size: clamp(48px, 10vw, 72px);
+      font-size: clamp(52px, 12vw, 88px);
       font-weight: 700;
-      letter-spacing: -0.04em;
-      line-height: 1;
-      margin-bottom: 28px;
+      letter-spacing: -0.05em;
+      line-height: 0.95;
+      margin-bottom: 32px;
     }
     
     .hero p {
-      font-size: 20px;
+      font-size: 22px;
       color: var(--text-muted);
-      max-width: 420px;
+      max-width: 480px;
       margin-bottom: 48px;
-      line-height: 1.6;
+      line-height: 1.5;
     }
     
     .hero-cta {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       background: var(--text);
       color: var(--bg);
-      padding: 18px 36px;
+      padding: 20px 40px;
       border-radius: 12px;
-      font-size: 16px;
+      font-size: 17px;
       font-weight: 500;
       text-decoration: none;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
     
     .hero-cta:hover {
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
     }
     
     .hero-cta svg {
-      width: 18px;
-      height: 18px;
-      transition: transform 0.2s;
+      width: 20px;
+      height: 20px;
+      transition: transform 0.3s;
     }
     
-    .hero-cta:hover svg {
-      transform: translateX(4px);
-    }
+    .hero-cta:hover svg { transform: translateX(6px); }
     
-    .scroll-hint {
+    .scroll-indicator {
       position: absolute;
-      bottom: 60px;
+      bottom: 80px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
       color: var(--text-muted);
-      font-size: 12px;
-      letter-spacing: 0.1em;
+      font-size: 11px;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
-      animation: bounce 2s ease-in-out infinite;
+      animation: float 3s ease-in-out infinite;
     }
     
-    @keyframes bounce {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(8px); }
+    @keyframes float {
+      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.6; }
+      50% { transform: translateX(-50%) translateY(12px); opacity: 1; }
     }
     
-    .scroll-hint svg {
-      width: 20px;
-      height: 20px;
-      opacity: 0.5;
-    }
-    
-    /* Pricing */
-    .pricing-card {
+    /* Cards */
+    .card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 24px;
-      padding: 64px;
-      backdrop-filter: blur(20px);
+      padding: 56px;
+      backdrop-filter: blur(24px);
       position: relative;
       overflow: hidden;
     }
     
-    .pricing-card::before {
+    .card::before {
       content: '';
       position: absolute;
       top: 0;
-      left: 20%;
-      right: 20%;
+      left: 10%;
+      right: 10%;
       height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.4), transparent);
+      background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.5), transparent);
     }
     
-    .pricing-label {
-      font-size: 12px;
+    .section-label {
+      font-size: 11px;
       font-weight: 500;
       color: var(--accent);
       text-transform: uppercase;
-      letter-spacing: 0.15em;
-      margin-bottom: 20px;
+      letter-spacing: 0.2em;
+      margin-bottom: 24px;
     }
     
+    /* Pricing */
     .pricing-amount {
-      font-size: 64px;
+      font-size: 72px;
       font-weight: 700;
       letter-spacing: -0.04em;
       margin-bottom: 8px;
     }
     
     .pricing-amount span {
-      font-size: 32px;
+      font-size: 36px;
       color: var(--text-muted);
       font-weight: 500;
     }
     
     .pricing-details {
       color: var(--text-muted);
-      font-size: 16px;
+      font-size: 17px;
       margin-bottom: 48px;
     }
     
-    .pricing-features {
+    .features {
       list-style: none;
       margin-bottom: 48px;
     }
     
-    .pricing-features li {
+    .features li {
       display: flex;
       align-items: center;
       gap: 16px;
-      padding: 16px 0;
+      padding: 18px 0;
       border-bottom: 1px solid var(--border);
-      font-size: 16px;
-      color: rgba(255, 255, 255, 0.8);
+      font-size: 17px;
+      color: rgba(255, 255, 255, 0.85);
     }
     
-    .pricing-features li:last-child {
-      border-bottom: none;
-    }
+    .features li:last-child { border-bottom: none; }
     
-    .check {
-      color: var(--accent);
-      flex-shrink: 0;
-    }
+    .check { color: var(--accent); flex-shrink: 0; }
     
-    .pricing-cta {
+    .card-cta {
       display: block;
       width: 100%;
       background: var(--text);
       color: var(--bg);
-      padding: 20px;
+      padding: 22px;
       border-radius: 12px;
-      font-size: 16px;
+      font-size: 17px;
       font-weight: 500;
       text-decoration: none;
       text-align: center;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.3s;
     }
     
-    .pricing-cta:hover {
+    .card-cta:hover {
       transform: translateY(-2px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
     }
     
-    /* Process */
-    .steps {
-      display: grid;
-      gap: 32px;
-    }
+    /* Steps */
+    .steps { display: grid; gap: 24px; }
     
     .step {
       display: flex;
       gap: 28px;
-      padding: 32px;
+      padding: 36px;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 20px;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(16px);
       transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
     
     .step:hover {
-      transform: translateX(8px);
-      border-color: rgba(34, 211, 238, 0.2);
+      transform: translateX(12px);
+      border-color: rgba(34, 211, 238, 0.3);
+      box-shadow: -8px 0 40px rgba(34, 211, 238, 0.1);
     }
     
     .step-num {
-      width: 56px;
-      height: 56px;
-      background: rgba(34, 211, 238, 0.1);
-      border: 1px solid rgba(34, 211, 238, 0.2);
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(139, 92, 246, 0.2));
+      border: 1px solid rgba(34, 211, 238, 0.3);
       border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 600;
       color: var(--accent);
       flex-shrink: 0;
     }
     
     .step h3 {
-      font-size: 20px;
+      font-size: 21px;
       font-weight: 600;
       margin-bottom: 8px;
       letter-spacing: -0.02em;
@@ -381,10 +307,10 @@
     
     .step p {
       color: var(--text-muted);
-      font-size: 15px;
+      font-size: 16px;
     }
     
-    /* Fit */
+    /* Fit grid */
     .fit-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -396,23 +322,21 @@
       border: 1px solid var(--border);
       border-radius: 20px;
       padding: 40px;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(16px);
     }
     
     .fit-card h3 {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 500;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.15em;
       margin-bottom: 28px;
     }
     
     .fit-card.good h3 { color: var(--accent); }
     .fit-card.bad h3 { color: #f87171; }
     
-    .fit-list {
-      list-style: none;
-    }
+    .fit-list { list-style: none; }
     
     .fit-list li {
       font-size: 15px;
@@ -421,86 +345,46 @@
       border-bottom: 1px solid var(--border);
     }
     
-    .fit-list li:last-child {
-      border-bottom: none;
-    }
+    .fit-list li:last-child { border-bottom: none; }
     
     /* Footer */
     footer {
-      min-height: 60vh;
+      min-height: 80vh;
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-    
-    .footer-inner {
       text-align: center;
-      opacity: 0;
-      transform: translateY(40px);
-      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    
-    footer.visible .footer-inner {
-      opacity: 1;
-      transform: translateY(0);
     }
     
     footer h2 {
-      font-size: clamp(32px, 6vw, 48px);
+      font-size: clamp(40px, 8vw, 64px);
       font-weight: 700;
-      letter-spacing: -0.03em;
-      margin-bottom: 24px;
+      letter-spacing: -0.04em;
+      margin-bottom: 32px;
     }
     
     footer a {
       color: var(--accent);
       text-decoration: none;
-      font-size: 20px;
+      font-size: 22px;
       transition: opacity 0.2s;
     }
     
-    footer a:hover {
-      opacity: 0.7;
-    }
-    
-    /* Section labels */
-    .section-label {
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      margin-bottom: 48px;
-    }
+    footer a:hover { opacity: 0.7; }
     
     /* Responsive */
     @media (max-width: 700px) {
-      .blob { filter: blur(60px); opacity: 0.4; }
-      .blob-1 { width: 350px; height: 350px; }
-      .blob-2 { width: 300px; height: 300px; }
-      .blob-3 { width: 280px; height: 280px; }
-      .blob-4 { width: 250px; height: 250px; }
-      
-      section { min-height: auto; padding: 120px 0; }
-      .hero { min-height: 100vh; }
-      
-      .pricing-card { padding: 40px 28px; }
-      .pricing-amount { font-size: 44px; }
+      section { padding: 100px 20px; }
+      .card { padding: 36px 24px; }
+      .pricing-amount { font-size: 48px; }
       .pricing-amount span { font-size: 24px; }
-      
       .step { flex-direction: column; gap: 20px; }
       .fit-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <!-- Floating blobs -->
-  <div class="blobs">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
-    <div class="blob blob-4"></div>
-  </div>
+  <canvas id="space"></canvas>
   
   <nav>
     <div class="nav-content">
@@ -509,22 +393,22 @@
     </div>
   </nav>
   
-  <div class="space">
+  <div class="content">
     <!-- Hero -->
     <section class="hero visible">
       <div class="section-inner">
-        <h1>Ship your MVP<br>in 4–6 weeks.</h1>
-        <p>Fixed-price sprints for founders who need to move fast. No scope creep, no surprises.</p>
+        <h1>Ship your MVP<br>in weeks.</h1>
+        <p>Fixed-price sprints for founders who need to move fast. No scope creep.</p>
         <a href="https://cal.com" class="hero-cta">
           Book a call
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 8h10M9 4l4 4-4 4"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
         </a>
       </div>
-      <div class="scroll-hint">
-        <span>Scroll</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <div class="scroll-indicator">
+        <span>Scroll to explore</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M12 5v14M5 12l7 7 7-7"/>
         </svg>
       </div>
@@ -533,46 +417,45 @@
     <!-- Pricing -->
     <section>
       <div class="section-inner">
-        <p class="section-label">Pricing</p>
-        <div class="pricing-card">
-          <p class="pricing-label">MVP Sprint</p>
+        <div class="card">
+          <p class="section-label">Pricing</p>
           <p class="pricing-amount">$12k <span>– $25k</span></p>
-          <p class="pricing-details">4–6 weeks · Fixed scope · 50% deposit to start</p>
+          <p class="pricing-details">4–6 weeks · Fixed scope · 50% upfront</p>
           
-          <ul class="pricing-features">
+          <ul class="features">
             <li>
-              <svg class="check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg class="check" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
-              Production-ready v1 — not a prototype
+              Production-ready v1
             </li>
             <li>
-              <svg class="check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg class="check" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
-              Core user journey, end to end
+              Full user journey
             </li>
             <li>
-              <svg class="check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg class="check" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
-              Admin dashboard + analytics
+              Admin dashboard
             </li>
             <li>
-              <svg class="check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg class="check" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
-              Key integrations (payments, auth, APIs)
+              Key integrations
             </li>
             <li>
-              <svg class="check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg class="check" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
-              Handoff docs + roadmap
+              Docs + handoff
             </li>
           </ul>
           
-          <a href="https://cal.com" class="pricing-cta">Book discovery call</a>
+          <a href="https://cal.com" class="card-cta">Book discovery call</a>
         </div>
       </div>
     </section>
@@ -586,28 +469,28 @@
             <div class="step-num">1</div>
             <div>
               <h3>Discovery call</h3>
-              <p>15 minutes. We define scope and confirm fit.</p>
+              <p>15 min. Define scope, confirm fit.</p>
             </div>
           </div>
           <div class="step">
             <div class="step-num">2</div>
             <div>
               <h3>Fixed quote</h3>
-              <p>Clear price upfront. Deposit locks timeline.</p>
+              <p>Clear price. Deposit locks timeline.</p>
             </div>
           </div>
           <div class="step">
             <div class="step-num">3</div>
             <div>
               <h3>Build sprint</h3>
-              <p>Async updates. Weekly demos if you want them.</p>
+              <p>Async updates. Weekly demos optional.</p>
             </div>
           </div>
           <div class="step">
             <div class="step-num">4</div>
             <div>
               <h3>Ship + handoff</h3>
-              <p>Deployed product. Full documentation. Next steps.</p>
+              <p>Deployed. Documented. Done.</p>
             </div>
           </div>
         </div>
@@ -623,7 +506,7 @@
             <h3>Good fit</h3>
             <ul class="fit-list">
               <li>Non-technical founders</li>
-              <li>Pre-seed / Seed stage</li>
+              <li>Pre-seed / Seed</li>
               <li>B2B SaaS</li>
               <li>Internal tools</li>
               <li>Marketplaces</li>
@@ -634,8 +517,8 @@
             <h3>Not a fit</h3>
             <ul class="fit-list">
               <li>Idea-stage, no budget</li>
-              <li>Need ongoing maintenance</li>
-              <li>Want hourly billing</li>
+              <li>Ongoing maintenance</li>
+              <li>Hourly billing</li>
               <li>Open-ended scope</li>
             </ul>
           </div>
@@ -645,46 +528,175 @@
     
     <!-- Footer -->
     <footer>
-      <div class="footer-inner">
+      <div class="section-inner">
         <h2>Ready to ship?</h2>
         <a href="mailto:aljensen92@gmail.com">aljensen92@gmail.com</a>
       </div>
     </footer>
   </div>
   
+  <!-- Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
-    // Intersection Observer for scroll animations
+    // Scene setup
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x000000, 0.0003);
+    
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 3000);
+    camera.position.z = 0;
+    
+    const renderer = new THREE.WebGLRenderer({
+      canvas: document.getElementById('space'),
+      antialias: true,
+      alpha: true
+    });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    
+    // Stars
+    const starCount = 6000;
+    const starGeometry = new THREE.BufferGeometry();
+    const starPositions = new Float32Array(starCount * 3);
+    const starSizes = new Float32Array(starCount);
+    
+    for (let i = 0; i < starCount; i++) {
+      const i3 = i * 3;
+      starPositions[i3] = (Math.random() - 0.5) * 2000;
+      starPositions[i3 + 1] = (Math.random() - 0.5) * 2000;
+      starPositions[i3 + 2] = Math.random() * -4000;
+      starSizes[i] = Math.random() * 2 + 0.5;
+    }
+    
+    starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+    starGeometry.setAttribute('size', new THREE.BufferAttribute(starSizes, 1));
+    
+    // Star material with glow
+    const starMaterial = new THREE.ShaderMaterial({
+      uniforms: {
+        color: { value: new THREE.Color(0xffffff) },
+        time: { value: 0 }
+      },
+      vertexShader: `
+        attribute float size;
+        varying float vSize;
+        void main() {
+          vSize = size;
+          vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+          gl_PointSize = size * (300.0 / -mvPosition.z);
+          gl_Position = projectionMatrix * mvPosition;
+        }
+      `,
+      fragmentShader: `
+        uniform vec3 color;
+        uniform float time;
+        varying float vSize;
+        void main() {
+          float d = length(gl_PointCoord - vec2(0.5));
+          float alpha = 1.0 - smoothstep(0.0, 0.5, d);
+          alpha *= 0.8 + 0.2 * sin(time * 2.0 + vSize * 10.0);
+          gl_FragColor = vec4(color, alpha);
+        }
+      `,
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
+    });
+    
+    const stars = new THREE.Points(starGeometry, starMaterial);
+    scene.add(stars);
+    
+    // Nebula layers (colored fog clouds)
+    const nebulaGeometry = new THREE.BufferGeometry();
+    const nebulaCount = 100;
+    const nebulaPositions = new Float32Array(nebulaCount * 3);
+    
+    for (let i = 0; i < nebulaCount; i++) {
+      const i3 = i * 3;
+      nebulaPositions[i3] = (Math.random() - 0.5) * 1500;
+      nebulaPositions[i3 + 1] = (Math.random() - 0.5) * 1500;
+      nebulaPositions[i3 + 2] = Math.random() * -3500 - 500;
+    }
+    
+    nebulaGeometry.setAttribute('position', new THREE.BufferAttribute(nebulaPositions, 3));
+    
+    const nebulaMaterial = new THREE.PointsMaterial({
+      size: 400,
+      map: createNebulaTexture(),
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      opacity: 0.15
+    });
+    
+    const nebula = new THREE.Points(nebulaGeometry, nebulaMaterial);
+    scene.add(nebula);
+    
+    function createNebulaTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 128;
+      canvas.height = 128;
+      const ctx = canvas.getContext('2d');
+      
+      const gradient = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+      gradient.addColorStop(0, 'rgba(34, 211, 238, 0.3)');
+      gradient.addColorStop(0.4, 'rgba(139, 92, 246, 0.15)');
+      gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 128, 128);
+      
+      const texture = new THREE.CanvasTexture(canvas);
+      return texture;
+    }
+    
+    // Scroll tracking with smooth interpolation
+    let scrollY = 0;
+    let targetZ = 0;
+    let currentZ = 0;
+    
+    window.addEventListener('scroll', () => {
+      scrollY = window.scrollY;
+      targetZ = scrollY * -0.5;
+    });
+    
+    // Resize handler
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+    
+    // Animation loop
+    const clock = new THREE.Clock();
+    
+    function animate() {
+      requestAnimationFrame(animate);
+      
+      const elapsed = clock.getElapsedTime();
+      starMaterial.uniforms.time.value = elapsed;
+      
+      // Smooth camera movement
+      currentZ += (targetZ - currentZ) * 0.06;
+      camera.position.z = currentZ;
+      
+      // Subtle star rotation
+      stars.rotation.z = elapsed * 0.01;
+      
+      renderer.render(scene, camera);
+    }
+    
+    animate();
+    
+    // Section visibility observer
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
         }
       });
-    }, {
-      threshold: 0.2,
-      rootMargin: '-50px'
-    });
+    }, { threshold: 0.15 });
     
-    document.querySelectorAll('section, footer').forEach(section => {
-      observer.observe(section);
-    });
-    
-    // Parallax blobs on scroll
-    let ticking = false;
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const scrollY = window.scrollY;
-          const blobs = document.querySelectorAll('.blob');
-          blobs.forEach((blob, i) => {
-            const speed = 0.1 + (i * 0.05);
-            blob.style.transform = `translateY(${scrollY * speed}px)`;
-          });
-          ticking = false;
-        });
-        ticking = true;
-      }
-    });
+    document.querySelectorAll('section, footer').forEach(el => observer.observe(el));
   </script>
 </body>
 </html>
