@@ -96,26 +96,25 @@
     .plane-2 { top: 35%; animation: planeLeft 55s linear infinite; animation-delay: -18s; }
     .plane-3 { top: 70%; animation: planeRight 50s linear infinite; animation-delay: -30s; }
     
-    /* Dark mode - spacemen */
+    /* Dark mode - spaceman */
     .lottie-spaceman {
       position: absolute;
       width: 180px;
       height: 180px;
     }
     
-    .spaceman-1 { top: 15%; animation: floatRight 28s linear infinite; }
-    .spaceman-2 { top: 65%; animation: floatLeft 32s linear infinite; animation-delay: -12s; }
+    .spaceman-1 { top: 20%; animation: floatRight 30s linear infinite; }
     
-    /* Dark mode - UFOs */
-    .lottie-ufo {
+    /* Dark mode - solar system */
+    .lottie-solarsystem {
       position: absolute;
-      width: 160px;
-      height: 160px;
+      width: 500px;
+      height: 500px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0.6;
     }
-    
-    .ufo-1 { top: 8%; animation: ufoRight 22s linear infinite; }
-    .ufo-2 { top: 45%; animation: ufoLeft 26s linear infinite; animation-delay: -10s; }
-    .ufo-3 { top: 80%; animation: ufoRight 24s linear infinite; animation-delay: -18s; }
     
     /* Dark mode - rockets */
     .lottie-rocket {
@@ -632,16 +631,13 @@
       <div class="lottie-plane plane-3" id="plane3"></div>
     </div>
     
-    <!-- Dark mode: Spacemen + Rockets + UFOs -->
+    <!-- Dark mode: Spaceman + Rockets + Solar System -->
     <div class="dark-mode-objects">
+      <div class="lottie-solarsystem" id="solarsystem"></div>
       <div class="lottie-spaceman spaceman-1" id="spaceman1"></div>
-      <div class="lottie-spaceman spaceman-2" id="spaceman2"></div>
       <div class="lottie-rocket rocket-1" id="rocket1"></div>
       <div class="lottie-rocket rocket-2" id="rocket2"></div>
       <div class="lottie-rocket rocket-3" id="rocket3"></div>
-      <div class="lottie-ufo ufo-1" id="ufo1"></div>
-      <div class="lottie-ufo ufo-2" id="ufo2"></div>
-      <div class="lottie-ufo ufo-3" id="ufo3"></div>
     </div>
   </div>
   
@@ -837,12 +833,12 @@
     for (let i = 1; i <= 5; i++) lottie.loadAnimation({ ...birdConfig, container: document.getElementById('bird' + i) });
     for (let i = 1; i <= 3; i++) lottie.loadAnimation({ ...planeConfig, container: document.getElementById('plane' + i) });
     
-    const ufoConfig = { renderer: 'svg', loop: true, autoplay: true, path: 'animations/ufo.json' };
+    const solarsystemConfig = { renderer: 'svg', loop: true, autoplay: true, path: 'animations/solarsystem.json' };
     
     // Dark mode animations
-    for (let i = 1; i <= 2; i++) lottie.loadAnimation({ ...spacemanConfig, container: document.getElementById('spaceman' + i) });
+    lottie.loadAnimation({ ...spacemanConfig, container: document.getElementById('spaceman1') });
+    lottie.loadAnimation({ ...solarsystemConfig, container: document.getElementById('solarsystem') });
     for (let i = 1; i <= 3; i++) lottie.loadAnimation({ ...rocketConfig, container: document.getElementById('rocket' + i) });
-    for (let i = 1; i <= 3; i++) lottie.loadAnimation({ ...ufoConfig, container: document.getElementById('ufo' + i) });
     
     // Three.js setup
     scene = new THREE.Scene();
