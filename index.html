@@ -189,23 +189,24 @@
     /* Theme toggle */
     .theme-toggle {
       position: fixed;
-      top: 16px;
-      right: 80px;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(calc(-50% + 60px));
       z-index: 101;
       background: var(--card-bg);
       border: none;
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
+      width: 40px;
+      height: 40px;
+      border-radius: 20px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       box-shadow: 0 4px 15px var(--card-shadow);
-      transition: all 0.3s;
+      transition: background 0.3s, box-shadow 0.3s;
     }
     
-    .theme-toggle:hover { transform: scale(1.05); }
+    .theme-toggle:hover { opacity: 0.8; }
     
     .theme-toggle svg { width: 22px; height: 22px; fill: var(--text); }
     
@@ -578,7 +579,7 @@
       position: fixed;
       bottom: 24px;
       left: 50%;
-      transform: translateX(-50%);
+      transform: translateX(calc(-50% - 30px));
       display: flex;
       gap: 8px;
       z-index: 50;
