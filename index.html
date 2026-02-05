@@ -37,6 +37,120 @@
       background: #fff;
     }
     
+    /* Flying objects layer */
+    .flying-objects {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    
+    /* Birds */
+    .bird {
+      position: absolute;
+      opacity: 0.7;
+    }
+    
+    .bird svg {
+      fill: #334155;
+    }
+    
+    .bird-1 {
+      top: 15%;
+      animation: flyRight 18s linear infinite;
+    }
+    
+    .bird-2 {
+      top: 35%;
+      animation: flyLeft 22s linear infinite;
+      animation-delay: -5s;
+    }
+    
+    .bird-3 {
+      top: 55%;
+      animation: flyRight 20s linear infinite;
+      animation-delay: -10s;
+    }
+    
+    .bird-4 {
+      top: 75%;
+      animation: flyLeft 25s linear infinite;
+      animation-delay: -3s;
+    }
+    
+    .bird-5 {
+      top: 25%;
+      animation: flyRight 16s linear infinite;
+      animation-delay: -8s;
+    }
+    
+    .bird-6 {
+      top: 65%;
+      animation: flyLeft 19s linear infinite;
+      animation-delay: -12s;
+    }
+    
+    @keyframes flyRight {
+      0% { left: -150px; transform: scaleX(1); }
+      100% { left: calc(100% + 150px); transform: scaleX(1); }
+    }
+    
+    @keyframes flyLeft {
+      0% { left: calc(100% + 150px); transform: scaleX(-1); }
+      100% { left: -150px; transform: scaleX(-1); }
+    }
+    
+    /* Bird wing animation */
+    .bird svg {
+      animation: flap 0.3s ease-in-out infinite;
+    }
+    
+    @keyframes flap {
+      0%, 100% { transform: scaleY(1); }
+      50% { transform: scaleY(0.85); }
+    }
+    
+    /* Airplanes */
+    .plane {
+      position: absolute;
+      opacity: 0.5;
+    }
+    
+    .plane svg {
+      fill: #64748b;
+    }
+    
+    .plane-1 {
+      top: 10%;
+      animation: planeRight 35s linear infinite;
+    }
+    
+    .plane-2 {
+      top: 45%;
+      animation: planeLeft 40s linear infinite;
+      animation-delay: -15s;
+    }
+    
+    .plane-3 {
+      top: 80%;
+      animation: planeRight 45s linear infinite;
+      animation-delay: -25s;
+    }
+    
+    @keyframes planeRight {
+      0% { left: -200px; transform: scaleX(1) rotate(-2deg); }
+      100% { left: calc(100% + 200px); transform: scaleX(1) rotate(-2deg); }
+    }
+    
+    @keyframes planeLeft {
+      0% { left: calc(100% + 200px); transform: scaleX(-1) rotate(2deg); }
+      100% { left: -200px; transform: scaleX(-1) rotate(2deg); }
+    }
+    
     /* Nav */
     nav {
       position: fixed;
@@ -68,7 +182,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 1;
+      z-index: 3;
       perspective: 1200px;
       perspective-origin: 50% 50%;
       pointer-events: none;
@@ -109,7 +223,7 @@
       position: relative;
     }
     
-    /* Unique animations */
+    /* Animations per panel */
     .panel-0 { transform: translateZ(0px); }
     .panel-0 .panel-inner { opacity: 0; transform: scale(0.85); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
     .panel-0.active .panel-inner { opacity: 1; transform: scale(1); }
@@ -132,38 +246,12 @@
     
     .scroll-spacer { height: 600vh; position: relative; z-index: -1; }
     
-    /* Animated birds */
-    .birds {
-      position: absolute;
-      pointer-events: none;
-    }
-    
-    .bird {
-      position: absolute;
-      font-size: 24px;
-      animation: fly 3s ease-in-out infinite;
-    }
-    
-    .bird:nth-child(1) { top: -40px; right: -30px; animation-delay: 0s; }
-    .bird:nth-child(2) { top: 20px; right: -60px; animation-delay: 0.3s; font-size: 18px; }
-    .bird:nth-child(3) { top: -20px; left: -40px; animation-delay: 0.6s; font-size: 20px; }
-    .bird:nth-child(4) { bottom: -30px; right: -20px; animation-delay: 0.9s; font-size: 16px; }
-    .bird:nth-child(5) { bottom: 20px; left: -50px; animation-delay: 1.2s; font-size: 22px; }
-    
-    @keyframes fly {
-      0%, 100% { transform: translate(0, 0) rotate(0deg); }
-      25% { transform: translate(8px, -5px) rotate(5deg); }
-      50% { transform: translate(0, -10px) rotate(0deg); }
-      75% { transform: translate(-8px, -5px) rotate(-5deg); }
-    }
-    
     /* Cards */
     .card {
       background: #fff;
       border-radius: 24px;
       padding: clamp(28px, 6vw, 48px);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04);
-      position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.04);
     }
     
     .section-label {
@@ -182,8 +270,7 @@
       background: #fff;
       padding: clamp(32px, 8vw, 56px);
       border-radius: 28px;
-      box-shadow: 0 25px 80px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.03);
-      position: relative;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.03);
     }
     
     .hero-content h1 {
@@ -192,14 +279,12 @@
       letter-spacing: -0.04em;
       line-height: 0.95;
       margin-bottom: 20px;
-      color: var(--text);
     }
     
     .hero-content p {
       font-size: clamp(15px, 4vw, 18px);
       color: var(--text-muted);
       margin-bottom: 32px;
-      line-height: 1.5;
     }
     
     .cta-btn {
@@ -243,7 +328,6 @@
       letter-spacing: -0.04em;
       margin-bottom: 4px;
       text-align: center;
-      color: var(--text);
     }
     
     .pricing-amount span {
@@ -268,7 +352,6 @@
       padding: 12px 0;
       border-bottom: 1px solid rgba(0,0,0,0.06);
       font-size: 14px;
-      color: var(--text);
     }
     
     .features li:last-child { border-bottom: none; }
@@ -298,7 +381,7 @@
       padding: 20px;
       background: #fff;
       border-radius: 16px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
       align-items: flex-start;
     }
     
@@ -316,21 +399,17 @@
       flex-shrink: 0;
     }
     
-    .step h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; color: var(--text); }
+    .step h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
     .step p { color: var(--text-muted); font-size: 13px; }
     
     /* Fit */
-    .fit-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
+    .fit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     
     .fit-card {
       background: #fff;
       border-radius: 16px;
       padding: 24px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
     }
     
     .fit-card h3 {
@@ -359,8 +438,7 @@
       background: #fff;
       padding: clamp(40px, 10vw, 72px);
       border-radius: 28px;
-      box-shadow: 0 25px 80px rgba(0,0,0,0.1);
-      position: relative;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.12);
     }
     
     .final-cta h2 {
@@ -368,7 +446,6 @@
       font-weight: 700;
       letter-spacing: -0.03em;
       margin-bottom: 24px;
-      color: var(--text);
     }
     
     .final-cta a {
@@ -403,17 +480,69 @@
     
     .progress-dot.active {
       background: var(--accent);
-      box-shadow: 0 0 8px rgba(14, 165, 233, 0.5);
     }
     
     @media (max-width: 500px) {
       .fit-grid { grid-template-columns: 1fr; }
-      .bird { font-size: 16px !important; }
+      .bird svg { width: 60px; height: 40px; }
+      .plane svg { width: 80px; height: 30px; }
     }
   </style>
 </head>
 <body>
   <canvas id="sky"></canvas>
+  
+  <!-- Flying birds and planes -->
+  <div class="flying-objects">
+    <!-- Birds - SVG silhouettes -->
+    <div class="bird bird-1">
+      <svg width="120" height="80" viewBox="0 0 100 60">
+        <path d="M50 30 Q30 10 5 25 Q30 20 50 30 Q70 20 95 25 Q70 10 50 30 M50 30 L50 45 Q45 50 40 55 M50 45 Q55 50 60 55"/>
+      </svg>
+    </div>
+    <div class="bird bird-2">
+      <svg width="100" height="65" viewBox="0 0 100 60">
+        <path d="M50 30 Q30 10 5 25 Q30 20 50 30 Q70 20 95 25 Q70 10 50 30 M50 30 L50 45 Q45 50 40 55 M50 45 Q55 50 60 55"/>
+      </svg>
+    </div>
+    <div class="bird bird-3">
+      <svg width="90" height="60" viewBox="0 0 100 60">
+        <path d="M50 30 Q30 10 5 25 Q30 20 50 30 Q70 20 95 25 Q70 10 50 30 M50 30 L50 45 Q45 50 40 55 M50 45 Q55 50 60 55"/>
+      </svg>
+    </div>
+    <div class="bird bird-4">
+      <svg width="110" height="72" viewBox="0 0 100 60">
+        <path d="M50 30 Q30 10 5 25 Q30 20 50 30 Q70 20 95 25 Q70 10 50 30 M50 30 L50 45 Q45 50 40 55 M50 45 Q55 50 60 55"/>
+      </svg>
+    </div>
+    <div class="bird bird-5">
+      <svg width="80" height="52" viewBox="0 0 100 60">
+        <path d="M50 30 Q30 10 5 25 Q30 20 50 30 Q70 20 95 25 Q70 10 50 30 M50 30 L50 45 Q45 50 40 55 M50 45 Q55 50 60 55"/>
+      </svg>
+    </div>
+    <div class="bird bird-6">
+      <svg width="95" height="62" viewBox="0 0 100 60">
+        <path d="M50 30 Q30 10 5 25 Q30 20 50 30 Q70 20 95 25 Q70 10 50 30 M50 30 L50 45 Q45 50 40 55 M50 45 Q55 50 60 55"/>
+      </svg>
+    </div>
+    
+    <!-- Airplanes - SVG silhouettes -->
+    <div class="plane plane-1">
+      <svg width="180" height="60" viewBox="0 0 200 60">
+        <path d="M10 30 L60 30 L80 10 L85 10 L75 30 L180 30 L190 25 L195 25 L190 30 L195 30 L190 35 L180 30 L75 30 L85 50 L80 50 L60 30 L10 30 M60 30 L60 35 L40 45 L35 45 L55 35 L60 30"/>
+      </svg>
+    </div>
+    <div class="plane plane-2">
+      <svg width="150" height="50" viewBox="0 0 200 60">
+        <path d="M10 30 L60 30 L80 10 L85 10 L75 30 L180 30 L190 25 L195 25 L190 30 L195 30 L190 35 L180 30 L75 30 L85 50 L80 50 L60 30 L10 30 M60 30 L60 35 L40 45 L35 45 L55 35 L60 30"/>
+      </svg>
+    </div>
+    <div class="plane plane-3">
+      <svg width="140" height="46" viewBox="0 0 200 60">
+        <path d="M10 30 L60 30 L80 10 L85 10 L75 30 L180 30 L190 25 L195 25 L190 30 L195 30 L190 35 L180 30 L75 30 L85 50 L80 50 L60 30 L10 30 M60 30 L60 35 L40 45 L35 45 L55 35 L60 30"/>
+      </svg>
+    </div>
+  </div>
   
   <nav>
     <div class="nav-content">
@@ -425,15 +554,9 @@
   <div class="universe">
     <div class="track" id="track">
       
-      <!-- Panel 0: Hero -->
       <div class="panel panel-0 active" data-index="0">
         <div class="panel-inner">
           <div class="hero-content">
-            <div class="birds">
-              <span class="bird">🕊️</span>
-              <span class="bird">🕊️</span>
-              <span class="bird">🕊️</span>
-            </div>
             <h1>Ship your MVP<br>in weeks.</h1>
             <p>Fixed-price sprints for founders who move fast.</p>
             <a href="https://cal.com" class="cta-btn">
@@ -448,16 +571,9 @@
         </div>
       </div>
       
-      <!-- Panel 1: Pricing -->
       <div class="panel panel-1" data-index="1">
         <div class="panel-inner">
           <div class="card">
-            <div class="birds">
-              <span class="bird">🐦</span>
-              <span class="bird">🐦</span>
-              <span class="bird">🕊️</span>
-              <span class="bird">🐦</span>
-            </div>
             <p class="section-label">Pricing</p>
             <p class="pricing-amount">$12k <span>– $25k</span></p>
             <p class="pricing-details">4–6 weeks · Fixed scope · 50% upfront</p>
@@ -473,16 +589,8 @@
         </div>
       </div>
       
-      <!-- Panel 2: Process -->
       <div class="panel panel-2" data-index="2">
         <div class="panel-inner">
-          <div class="birds">
-            <span class="bird">🕊️</span>
-            <span class="bird">🐦</span>
-            <span class="bird">🕊️</span>
-            <span class="bird">🐦</span>
-            <span class="bird">🕊️</span>
-          </div>
           <p class="section-label">Process</p>
           <div class="steps">
             <div class="step"><div class="step-num">1</div><div><h3>Discovery call</h3><p>15 min. Define scope, confirm fit.</p></div></div>
@@ -493,14 +601,8 @@
         </div>
       </div>
       
-      <!-- Panel 3: Fit -->
       <div class="panel panel-3" data-index="3">
         <div class="panel-inner">
-          <div class="birds">
-            <span class="bird">🐦</span>
-            <span class="bird">🕊️</span>
-            <span class="bird">🐦</span>
-          </div>
           <p class="section-label">Fit</p>
           <div class="fit-grid">
             <div class="fit-card good">
@@ -525,16 +627,9 @@
         </div>
       </div>
       
-      <!-- Panel 4: Final CTA -->
       <div class="panel panel-4" data-index="4">
         <div class="panel-inner">
           <div class="final-cta">
-            <div class="birds">
-              <span class="bird">🕊️</span>
-              <span class="bird">🕊️</span>
-              <span class="bird">🕊️</span>
-              <span class="bird">🕊️</span>
-            </div>
             <h2>Ready to ship?</h2>
             <a href="mailto:aljensen92@gmail.com">aljensen92@gmail.com</a>
           </div>
@@ -565,126 +660,89 @@
     renderer.setSize(innerWidth, innerHeight);
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
     
-    // Cloud texture creator
     function createCloudTexture(color1, color2) {
       const canvas = document.createElement('canvas');
       canvas.width = canvas.height = 256;
       const ctx = canvas.getContext('2d');
-      
       const gradient = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
       gradient.addColorStop(0, color1);
       gradient.addColorStop(0.5, color2);
       gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-      
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, 256, 256);
-      
       return new THREE.CanvasTexture(canvas);
     }
     
     // Blue clouds
-    const blueCloudGeo = new THREE.BufferGeometry();
-    const blueCount = 40;
-    const bluePos = new Float32Array(blueCount * 3);
-    
-    for (let i = 0; i < blueCount; i++) {
+    const blueGeo = new THREE.BufferGeometry();
+    const bluePos = new Float32Array(40 * 3);
+    for (let i = 0; i < 40; i++) {
       bluePos[i * 3] = (Math.random() - 0.5) * 3000;
       bluePos[i * 3 + 1] = (Math.random() - 0.5) * 1500;
       bluePos[i * 3 + 2] = Math.random() * -6000 - 200;
     }
-    blueCloudGeo.setAttribute('position', new THREE.BufferAttribute(bluePos, 3));
+    blueGeo.setAttribute('position', new THREE.BufferAttribute(bluePos, 3));
+    scene.add(new THREE.Points(blueGeo, new THREE.PointsMaterial({
+      size: 400, map: createCloudTexture('rgba(56, 189, 248, 0.5)', 'rgba(56, 189, 248, 0.15)'),
+      transparent: true, depthWrite: false
+    })));
     
-    const blueMat = new THREE.PointsMaterial({
-      size: 400,
-      map: createCloudTexture('rgba(56, 189, 248, 0.6)', 'rgba(56, 189, 248, 0.2)'),
-      transparent: true,
-      depthWrite: false
-    });
-    scene.add(new THREE.Points(blueCloudGeo, blueMat));
-    
-    // Yellow/gold clouds
-    const yellowCloudGeo = new THREE.BufferGeometry();
-    const yellowCount = 35;
-    const yellowPos = new Float32Array(yellowCount * 3);
-    
-    for (let i = 0; i < yellowCount; i++) {
+    // Yellow clouds
+    const yellowGeo = new THREE.BufferGeometry();
+    const yellowPos = new Float32Array(35 * 3);
+    for (let i = 0; i < 35; i++) {
       yellowPos[i * 3] = (Math.random() - 0.5) * 3000;
       yellowPos[i * 3 + 1] = (Math.random() - 0.5) * 1500;
       yellowPos[i * 3 + 2] = Math.random() * -5500 - 400;
     }
-    yellowCloudGeo.setAttribute('position', new THREE.BufferAttribute(yellowPos, 3));
+    yellowGeo.setAttribute('position', new THREE.BufferAttribute(yellowPos, 3));
+    scene.add(new THREE.Points(yellowGeo, new THREE.PointsMaterial({
+      size: 350, map: createCloudTexture('rgba(251, 191, 36, 0.45)', 'rgba(251, 191, 36, 0.1)'),
+      transparent: true, depthWrite: false
+    })));
     
-    const yellowMat = new THREE.PointsMaterial({
-      size: 350,
-      map: createCloudTexture('rgba(251, 191, 36, 0.5)', 'rgba(251, 191, 36, 0.15)'),
-      transparent: true,
-      depthWrite: false
-    });
-    scene.add(new THREE.Points(yellowCloudGeo, yellowMat));
-    
-    // White fluffy clouds
-    const whiteCloudGeo = new THREE.BufferGeometry();
-    const whiteCount = 50;
-    const whitePos = new Float32Array(whiteCount * 3);
-    
-    for (let i = 0; i < whiteCount; i++) {
+    // White clouds
+    const whiteGeo = new THREE.BufferGeometry();
+    const whitePos = new Float32Array(50 * 3);
+    for (let i = 0; i < 50; i++) {
       whitePos[i * 3] = (Math.random() - 0.5) * 3500;
       whitePos[i * 3 + 1] = (Math.random() - 0.5) * 1800;
       whitePos[i * 3 + 2] = Math.random() * -6000 - 100;
     }
-    whiteCloudGeo.setAttribute('position', new THREE.BufferAttribute(whitePos, 3));
-    
-    const whiteMat = new THREE.PointsMaterial({
-      size: 300,
-      map: createCloudTexture('rgba(240, 240, 245, 0.8)', 'rgba(240, 240, 245, 0.3)'),
-      transparent: true,
-      depthWrite: false
-    });
-    scene.add(new THREE.Points(whiteCloudGeo, whiteMat));
+    whiteGeo.setAttribute('position', new THREE.BufferAttribute(whitePos, 3));
+    scene.add(new THREE.Points(whiteGeo, new THREE.PointsMaterial({
+      size: 300, map: createCloudTexture('rgba(230, 235, 245, 0.7)', 'rgba(230, 235, 245, 0.2)'),
+      transparent: true, depthWrite: false
+    })));
     
     // === SCROLL ===
     const track = document.getElementById('track');
     const panels = document.querySelectorAll('.panel');
     const dots = document.querySelectorAll('.progress-dot');
-    const panelCount = panels.length;
     const zPerPanel = 1500;
     
-    let scrollY = 0;
-    let targetZ = 0;
-    let currentZ = 0;
+    let scrollY = 0, targetZ = 0, currentZ = 0;
     
     window.addEventListener('scroll', () => {
       scrollY = window.scrollY;
-      const maxScroll = document.body.scrollHeight - innerHeight;
-      const progress = Math.min(scrollY / maxScroll, 1);
-      targetZ = progress * (panelCount - 1) * zPerPanel;
+      const progress = Math.min(scrollY / (document.body.scrollHeight - innerHeight), 1);
+      targetZ = progress * (panels.length - 1) * zPerPanel;
     });
     
     function updatePanels() {
       const currentPanel = Math.round(currentZ / zPerPanel);
-      
-      panels.forEach((panel, i) => {
-        panel.classList.toggle('active', i === currentPanel);
-      });
-      
-      dots.forEach((dot, i) => {
-        dot.classList.toggle('active', i === currentPanel);
-      });
-      
+      panels.forEach((p, i) => p.classList.toggle('active', i === currentPanel));
+      dots.forEach((d, i) => d.classList.toggle('active', i === currentPanel));
       track.style.transform = `translateZ(${currentZ}px)`;
     }
     
-    // === ANIMATE ===
     function animate() {
       requestAnimationFrame(animate);
-      
       currentZ += (targetZ - currentZ) * 0.07;
       camera.position.z = -currentZ * 0.25;
-      
       updatePanels();
       renderer.render(scene, camera);
     }
-    
     animate();
     
     window.addEventListener('resize', () => {
