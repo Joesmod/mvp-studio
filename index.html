@@ -103,9 +103,19 @@
       height: 180px;
     }
     
-    .spaceman-1 { top: 10%; animation: floatRight 25s linear infinite; }
-    .spaceman-2 { top: 40%; animation: floatLeft 30s linear infinite; animation-delay: -8s; }
-    .spaceman-3 { top: 70%; animation: floatRight 28s linear infinite; animation-delay: -18s; }
+    .spaceman-1 { top: 15%; animation: floatRight 28s linear infinite; }
+    .spaceman-2 { top: 65%; animation: floatLeft 32s linear infinite; animation-delay: -12s; }
+    
+    /* Dark mode - UFOs */
+    .lottie-ufo {
+      position: absolute;
+      width: 160px;
+      height: 160px;
+    }
+    
+    .ufo-1 { top: 8%; animation: ufoRight 22s linear infinite; }
+    .ufo-2 { top: 45%; animation: ufoLeft 26s linear infinite; animation-delay: -10s; }
+    .ufo-3 { top: 80%; animation: ufoRight 24s linear infinite; animation-delay: -18s; }
     
     /* Dark mode - rockets */
     .lottie-rocket {
@@ -158,6 +168,22 @@
     @keyframes rocketLeft {
       0% { left: calc(100% + 180px); transform: scaleX(-1) rotate(15deg); }
       100% { left: -180px; transform: scaleX(-1) rotate(15deg); }
+    }
+    
+    @keyframes ufoRight {
+      0% { left: -180px; transform: translateY(0); }
+      25% { transform: translateY(-20px); }
+      50% { transform: translateY(10px); }
+      75% { transform: translateY(-15px); }
+      100% { left: calc(100% + 180px); transform: translateY(0); }
+    }
+    
+    @keyframes ufoLeft {
+      0% { left: calc(100% + 180px); transform: scaleX(-1) translateY(0); }
+      25% { transform: scaleX(-1) translateY(15px); }
+      50% { transform: scaleX(-1) translateY(-20px); }
+      75% { transform: scaleX(-1) translateY(10px); }
+      100% { left: -180px; transform: scaleX(-1) translateY(0); }
     }
     
     /* Theme toggle */
@@ -605,14 +631,16 @@
       <div class="lottie-plane plane-3" id="plane3"></div>
     </div>
     
-    <!-- Dark mode: Spacemen + Rockets -->
+    <!-- Dark mode: Spacemen + Rockets + UFOs -->
     <div class="dark-mode-objects">
       <div class="lottie-spaceman spaceman-1" id="spaceman1"></div>
       <div class="lottie-spaceman spaceman-2" id="spaceman2"></div>
-      <div class="lottie-spaceman spaceman-3" id="spaceman3"></div>
       <div class="lottie-rocket rocket-1" id="rocket1"></div>
       <div class="lottie-rocket rocket-2" id="rocket2"></div>
       <div class="lottie-rocket rocket-3" id="rocket3"></div>
+      <div class="lottie-ufo ufo-1" id="ufo1"></div>
+      <div class="lottie-ufo ufo-2" id="ufo2"></div>
+      <div class="lottie-ufo ufo-3" id="ufo3"></div>
     </div>
   </div>
   
@@ -808,9 +836,12 @@
     for (let i = 1; i <= 5; i++) lottie.loadAnimation({ ...birdConfig, container: document.getElementById('bird' + i) });
     for (let i = 1; i <= 3; i++) lottie.loadAnimation({ ...planeConfig, container: document.getElementById('plane' + i) });
     
+    const ufoConfig = { renderer: 'svg', loop: true, autoplay: true, path: 'animations/ufo.json' };
+    
     // Dark mode animations
-    for (let i = 1; i <= 3; i++) lottie.loadAnimation({ ...spacemanConfig, container: document.getElementById('spaceman' + i) });
+    for (let i = 1; i <= 2; i++) lottie.loadAnimation({ ...spacemanConfig, container: document.getElementById('spaceman' + i) });
     for (let i = 1; i <= 3; i++) lottie.loadAnimation({ ...rocketConfig, container: document.getElementById('rocket' + i) });
+    for (let i = 1; i <= 3; i++) lottie.loadAnimation({ ...ufoConfig, container: document.getElementById('ufo' + i) });
     
     // Three.js setup
     scene = new THREE.Scene();
